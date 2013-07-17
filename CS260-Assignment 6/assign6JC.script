@@ -1,0 +1,78 @@
+Script started on Tue Nov 27 11:14:31 2012
+bash-3.2$ make
+g++ driver.cpp Set.cpp -o assign6JC
+bash-3.2$ ./assign6JC 
+
+
+
+********** Welcome to the Set Operations Program. **********
+
+Add elements to Set 1.
+How many elements would you like to add? 4
+Element 1: 33
+Element 2: 40
+Element 3: 90
+Element 4: -20
+Do you want to read input from a file? (y/n): y
+Enter file name for file input: setData.txt
+Set 1: {40, 90, 16, 18, 22, 24, 100, 68, 44}
+Using copy constructor for set 2.
+
+Set 2 after copy constructor: {40, 90, 16, 18, 22, 24, 100, 68, 44}
+
+Clearing Set 2.
+Do you want to read input from a file? (y/n): y
+Enter file name for file input: setDta  ata2.txt
+Set 2 after reading from a file: {2, 4, 6, 66, 22, 12}
+
+Do you want to enter your own elements? (y/n): y
+How many elements would you like to add? 3
+Element 1: 30
+Element 2: 24
+Element 3: 18
+Set 2 after user input: {2, 4, 6, 66, 22, 12, 30, 24, 18}
+
+Removing elements from Set 2. 
+Number of elements to be removed: 3
+Removing an element. Element to be removed: 2
+
+Removing an element. Element to be removed: 4
+
+Removing an element. Element to be removed: 6
+
+Set 2 after removing 3 element(s): {66, 22, 12, 30, 24, 18}
+
+Unioning Set 1 and Set 2.
+Union of Set 1 and Set 2: {40, 90, 16, 18, 22, 24, 100, 68, 44, 66, 12, 30}
+
+********************
+Setting Set 3 equal to Set 1. 
+********************
+Set 3 before operation: {40, 90, 16, 18, 22, 24, 100, 68, 44, 66, 12, 30}
+
+Set 1: {40, 90, 16, 18, 22, 24, 100, 68, 44}
+
+Set 3 now equals Set 1
+Set 3 after operation: {40, 90, 16, 18, 22, 24, 100, 68, 44}
+
+Set 1: {40, 90, 16, 18, 22, 24, 100, 68, 44}
+
+Reentering Set 1 and Set 2.
+For Set 1.
+How many elements would you like to add? 4
+Element 1: 22
+Element 2: 30
+Element 3: 10
+Element 4: 8
+For Set 2.
+How many elements would you like to add? 3
+Element 1: 8
+Element 2: 10
+Element 3: 40
+Intersecting Set 1 and Set 2.
+Intersection of Set 1 and Set 2: {10, 8}
+
+bash-3.2$ exit
+exit
+
+Script done on Tue Nov 27 11:16:03 2012

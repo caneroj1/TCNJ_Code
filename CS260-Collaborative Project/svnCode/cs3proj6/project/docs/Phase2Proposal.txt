@@ -1,0 +1,56 @@
+-- Read-only output files
+	Find on cplusplus.com/reference...ofstream members. If not there google
+
+-- Updated UI and UP
+	- Bug fixes
+		-- Tweak "remove" User Interaction.
+
+-- Updates to LinkedList
+	- Complete overhaul to LinkedList now that Nodes store pointers
+	- The Big Three most certainly need to be redone
+		-- Current operator= and copy const. will only copy the pointers (memory addresses) of the accounts in the list
+	- I did some of this stuff already, but I didn't touch the big three.
+	- DEREFERENCING ON COMPARISONS
+
+-- Inheritance/Polymorphism
+	- Different Types of Accounts
+		-- Subscription. New attributes include: expiration, monthly cost, active/inactive
+		-- With descrip
+		-- Without
+	- LinkedList::Node must now store Account*, not Account
+	- Base Account class must store: siteName, username, password, url
+		--getters and setters for all
+		--overload ostream& and istream& (same format as previous)
+		--Call it Account
+	- With description Account must store description
+		--getter and setter for desc. Inherit all other members from base
+		--overload ostrteam& and istream&
+		--call it DescribedAccount
+	- Without description Account is no different from base class. I'll be using base for that
+	- Subscription: Here's where we mix things up a bit. That's why i like it.
+		--must store all base attributes and a description
+		--in addition, stores expiration date, monthly cost
+		--Consider active/inactive boolean function we discussed. (#include <ctime>) <-look it up in the cplusplus.com/reference
+		--Call it SubscribedAccount
+
+NEW CONSTRUCTORS FOR ACCOUNT TYPES: (ATTN GARY)
+	--Account::Account();
+	--Account::Account(int numAttributes);	// Redefine this same one in child classes by calling this base constructor
+	--Account::Account(string siteName);	// Also redefine this one in child classes by calling this base constructor
+	--Account::Account(int numAtt, string sName, string username, string password, string URL); // NON-DEFAULT child class constructors should call this parent constructor with matching attributes
+	--Account member functions
+		-virtual ~Account();	// This may not be necessary since accounts deal only with strings and int
+		-virtual ostream& print(ostream&) const;	// Must be overridden in each child class. Look at Writer.cpp for the format. I'll hae to rewrite Writer.cpp when you're done to reflect the changes
+		-getters and setters for instance data
+	--StandardAccount::StandardAccount();
+	--StandardAccount::StandardAccount(int);
+	--StandardAccount::StandardAccount(string);
+	--StandardAccount::StandardAccount(int, string, string, string, string); // simply calls account's constructor
+	--DescribedAccount::DescribedAccount();
+	--DescribedAccount::DescribedAccount(int numAttributes);
+	--DescribedAccount::DescribedAccount(string siteName);
+	--DescribedAccount::DescribedAccount(int numAtt, string sName, string username, string password, string URL, string siteDescrip);
+	--SubscribedAccount::SubscribedAccount();
+	--SubscribedAccount::SubscribedAccount(int numAttributes);
+	--SubscribedAccount::SubscribedAccount(string siteName);
+	--SubscribedAccount::SubscribedAccount(int numAtt, string sName, string username, string password, string URL, string siteDescrip, string subExpiry, string monthlyFee);

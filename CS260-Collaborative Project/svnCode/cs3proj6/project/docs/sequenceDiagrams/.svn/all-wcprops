@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/cs3proj6/!svn/ver/78/project/docs/sequenceDiagrams
+END
+SystemSequenceGenerateRandomPassword.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/cs3proj6/!svn/ver/78/project/docs/sequenceDiagrams/SystemSequenceGenerateRandomPassword.pdf
+END
+SEQUENCECREATEPROFILE.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/cs3proj6/!svn/ver/21/project/docs/sequenceDiagrams/SEQUENCECREATEPROFILE.pdf
+END
+SystemSequenceUserRemovesUserProfile.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/cs3proj6/!svn/ver/21/project/docs/sequenceDiagrams/SystemSequenceUserRemovesUserProfile.pdf
+END
+SEQUENCESEARCH.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/cs3proj6/!svn/ver/21/project/docs/sequenceDiagrams/SEQUENCESEARCH.pdf
+END
+SystemSequenceUserDecidedToPrintAllData.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/cs3proj6/!svn/ver/21/project/docs/sequenceDiagrams/SystemSequenceUserDecidedToPrintAllData.pdf
+END
+SEQUENCEREMOVEACCOUNT.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/cs3proj6/!svn/ver/21/project/docs/sequenceDiagrams/SEQUENCEREMOVEACCOUNT.pdf
+END
+SystemSequenceUserAddsAnAccount.pdf
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/cs3proj6/!svn/ver/21/project/docs/sequenceDiagrams/SystemSequenceUserAddsAnAccount.pdf
+END

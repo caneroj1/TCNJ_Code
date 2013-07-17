@@ -1,0 +1,1669 @@
+Script started on Fri Nov 30 17:54:43 2012
+[?1034hbash-3.2$ make[K[K[K[Kpwd
+
+/Users/kingm8/Desktop/project/source
+
+bash-3.2$ make
+
+g++ -c ./src/NYANDriver.cpp
+
+g++ -c ./src/UserInterface.cpp
+
+g++ -c ./src/UserProfile.cpp
+
+g++ -c ./src/List.cpp
+
+g++ -c ./src/SubscribedAccount.cpp
+
+g++ -c ./src/DescribedAccount.cpp
+
+g++ -c ./src/StandardAccount.cpp
+
+g++ -c ./src/Account.cpp
+
+g++ -c ./src/Reader.cpp
+
+g++ -c ./src/Writer.cpp
+
+g++ -c ./src/Cryptography.cpp
+
+g++ -c ./src/Generator.cpp
+
+g++ NYANDriver.o UserInterface.o UserProfile.o List.o SubscribedAccount.o DescribedAccount.o StandardAccount.o Account.o Reader.o Writer.o Cryptography.o Generator.o -o NYAN
+
+bash-3.2$ ./NYAN
+
+WELCOME TO NYAN SECURITY'S PASSWORD MANAGER!
+
+
+
+At each menu screen, enter the character that represents menu item you would like to select.
+
+
+
+
+
+Are you a new user or an existing user?
+
+**********************************
+
+L - LOGIN
+
+C - CREATE NEW PROFILE
+
+**********************************
+
+l
+
+
+
+
+
+You have opted to login to an existing profile.
+
+
+
+Please enter your profile username.
+
+kingm8
+
+
+
+Please enter your profile password.
+
+pass
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  p
+
+
+
+You have opted to print all your accounts to the screen.
+
+***Front Of List***
+
+
+
+
+
+Site Name:  facebook
+
+User Name:  king.matt
+
+Password:  juniper
+
+Site URL:  www.facebook.com
+
+
+
+
+
+Site Name:  Trigger
+
+User Name:  alestorm
+
+Password:  w&A4)r>Yb7l-b,
+
+Site URL:  www.trigger.com
+
+Site Description:  You buy guns here, it's pretty obvious
+
+
+
+
+
+Site Name:  umbrella
+
+User Name:  rainsAPain
+
+Password:  IhATErAIN
+
+Site URL:  www.umbrella.gov
+
+Site Description:  It gives me a weekly newsletter for government grade umbrellas! If you couldn't tell, I HATE RAIN!
+
+Expiration Date:  12/21/2012
+
+Monthly Fee:  $15.99
+
+
+
+
+
+***End Of List***
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  r
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  A
+
+
+
+You have opted to add a new account to the system.
+
+
+
+**********************************************************
+
+Enter which type of account you registered:
+
+A -- STANDARD ACCOUNT
+
+	-Consists of a site name, username, password, and URL.
+
+D -- DESCRIBED STANDARD ACCOUNT
+
+	-Consists of the same attributes as standard AND a brief description.
+
+S -- SUBSCRIPTION TO A PAID SERVICE
+
+	-Consists of all above attributes AND an expiration date and monthly cost.
+
+**********************************************************
+
+
+
+Selection:  S
+
+
+
+Now you must enter all the attributes of your new account individually.
+
+Please enter the name of the site you registered the account.
+
+net   Netflix
+
+
+
+Please enter your username for Netflix
+
+matt    kingMatt. @gmailc.  .com
+
+
+
+Would you like the system to generate a random password?
+
+Enter Y for yes, or N to enter your own password.
+
+Selection:  N
+
+
+
+Please enter your new password.
+
+berkScountyproph     ProPhet
+
+
+
+Please enter the home URL of Netflix
+
+ww.   w.  netflic.  xc .com
+
+
+
+Please enter a brief, single-line description of Netflix
+
+st  A Stream films and televisions    shows on demans d
+
+
+
+Please enter the expiration date of the subscription to Netflix
+
+11/26/2012 (mone thly automatic renewal                         with automativ c monthly renewal
+
+
+
+Please enter the monthly fee of the subscription to 
+
+$ 8.99
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  s
+
+
+
+You have opted to search for an existing account.
+
+Enter the name of the site of the account for which you would like to search.
+
+netflix
+
+
+
+The system has found the target you searched for:
+
+
+
+Site Name:  Netflix
+
+User Name:  kingMatt@gmail.com
+
+Password:  berkScountyProPhet
+
+Site URL:  www.netflix.com
+
+Site Description:  Stream films and television shows on demand
+
+Expiration Date:  11/26/2012 (with automatic monthly renewal
+
+Monthly Fee:  $8.99
+
+
+
+
+
+************************************************
+
+What would you like to do with this account?
+
+M - MODIFY THE ACCOUNT DATA
+
+P - PRINT THE DATA AGAIN
+
+R - REMOVE ACCOUNT
+
+************************************************
+
+Selection:  p
+
+
+
+Site Name:  Netflix
+
+User Name:  kingMatt@gmail.com
+
+Password:  berkScountyProPhet
+
+Site URL:  www.netflix.com
+
+Site Description:  Stream films and television shows on demand
+
+Expiration Date:  11/26/2012 (with automatic monthly renewal
+
+Monthly Fee:  $8.99
+
+
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  r
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  s
+
+
+
+You have opted to search for an existing account.
+
+Enter the name of the site of the account for which you would like to search.
+
+umbrella
+
+
+
+The system has found the target you searched for:
+
+
+
+Site Name:  umbrella
+
+User Name:  rainsAPain
+
+Password:  IhATErAIN
+
+Site URL:  www.umbrella.gov
+
+Site Description:  It gives me a weekly newsletter for government grade umbrellas! If you couldn't tell, I HATE RAIN!
+
+Expiration Date:  12/21/2012
+
+Monthly Fee:  $15.99
+
+
+
+
+
+************************************************
+
+What would you like to do with this account?
+
+M - MODIFY THE ACCOUNT DATA
+
+P - PRINT THE DATA AGAIN
+
+R - REMOVE ACCOUNT
+
+************************************************
+
+Selection:  m
+
+
+
+*******************************************************
+
+Which attribute would you like to rewrite?
+
+N - SITE NAME
+
+U - USERNAME
+
+P - PASSWORD
+
+Z - URL
+
+D - DESCRIPTION
+
+E - SUBSCRIPTION EXPIRATION
+
+M - MONTHLY FEE
+
+*******************************************************
+
+Selection:  D
+
+
+
+
+
+Current account data:
+
+Site Name:  umbrella
+
+User Name:  rainsAPain
+
+Password:  IhATErAIN
+
+Site URL:  www.umbrella.gov
+
+Site Description:  It gives me a weekly newsletter for government grade umbrellas! If you couldn't tell, I HATE RAIN!
+
+Expiration Date:  12/21/2012
+
+Monthly Fee:  $15.99
+
+
+
+
+
+The current site description is: 
+
+It gives me a weekly newsletter for government grade umbrellas! If you couldn't tell, I HATE RAIN!
+
+Please enter the new description.
+
+It emails me a wekyl   ekly newsletter advertising gor vernment grade unmb   mbrellas! So   O USEFUL!
+
+Would you like to modify another field (Y/N)?
+
+N
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  P
+
+
+
+You have opted to print all your accounts to the screen.
+
+***Front Of List***
+
+
+
+
+
+Site Name:  facebook
+
+User Name:  king.matt
+
+Password:  juniper
+
+Site URL:  www.facebook.com
+
+
+
+
+
+Site Name:  Netflix
+
+User Name:  kingMatt@gmail.com
+
+Password:  berkScountyProPhet
+
+Site URL:  www.netflix.com
+
+Site Description:  Stream films and television shows on demand
+
+Expiration Date:  11/26/2012 (with automatic monthly renewal
+
+Monthly Fee:  $8.99
+
+
+
+
+
+Site Name:  Trigger
+
+User Name:  alestorm
+
+Password:  w&A4)r>Yb7l-b,
+
+Site URL:  www.trigger.com
+
+Site Description:  You buy guns here, it's pretty obvious
+
+
+
+
+
+Site Name:  umbrella
+
+User Name:  rainsAPain
+
+Password:  IhATErAIN
+
+Site URL:  www.umbrella.gov
+
+Site Description:  It emails me a weekly newsletter advertising government grade umbrellas! SO USEFUL!
+
+Expiration Date:  12/21/2012
+
+Monthly Fee:  $15.99
+
+
+
+
+
+***End Of List***
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  A
+
+
+
+You have opted to add a new account to the system.
+
+
+
+**********************************************************
+
+Enter which type of account you registered:
+
+A -- STANDARD ACCOUNT
+
+	-Consists of a site name, username, password, and URL.
+
+D -- DESCRIBED STANDARD ACCOUNT
+
+	-Consists of the same attributes as standard AND a brief description.
+
+S -- SUBSCRIPTION TO A PAID SERVICE
+
+	-Consists of all above attributes AND an expiration date and monthly cost.
+
+**********************************************************
+
+
+
+Selection:  A
+
+
+
+Now you must enter all the attributes of your new account individually.
+
+Please enter the name of the site you registered the account.
+
+re,pbe    move
+
+
+
+Please enter your username for remove
+
+testRem
+
+
+
+Would you like the system to generate a random password?
+
+Enter Y for yes, or N to enter your own password.
+
+Selection:  y
+
+
+
+How many characters long would you like this password? (min 10, max 64)
+
+34
+
+
+
+YOUR NEW PASSWORD IS:
+
+Yq].)#;\pIw^X5#DB%`OH*ZFWU#:-C,H\y
+
+
+
+Please enter the home URL of remove
+
+www.remove.t com
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  R s
+
+
+
+You have opted to search for an existing account.
+
+Enter the name of the site of the account for which you would like to search.
+
+re, move
+
+
+
+The system has found the target you searched for:
+
+
+
+Site Name:  remove
+
+User Name:  testRem
+
+Password:  Yq].)#;\pIw^X5#DB%`OH*ZFWU#:-C,H\y
+
+Site URL:  www.remove.com
+
+
+
+
+
+************************************************
+
+What would you like to do with this account?
+
+M - MODIFY THE ACCOUNT DATA
+
+P - PRINT THE DATA AGAIN
+
+R - REMOVE ACCOUNT
+
+************************************************
+
+Selection:  m R
+
+
+
+Account removed successfully.
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  E
+
+You have opted to exit the program. Saving changes.
+
+Writing data to file......
+
+Closing program...
+
+bash-3.2$ ./Nyan[K[K[KYAN
+
+WELCOME TO NYAN SECURITY'S PASSWORD MANAGER!
+
+
+
+At each menu screen, enter the character that represents menu item you would like to select.
+
+
+
+
+
+Are you a new user or an existing user?
+
+**********************************
+
+L - LOGIN
+
+C - CREATE NEW PROFILE
+
+**********************************
+
+l
+
+
+
+
+
+You have opted to login to an existing profile.
+
+
+
+Please enter your profile username.
+
+kingm8
+
+
+
+Please enter your profile password.
+
+sigtodby
+
+INCORRECT PASSWORD! Try again.
+
+
+
+Please enter your profile password.
+
+pass
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  A
+
+
+
+You have opted to add a new account to the system.
+
+
+
+**********************************************************
+
+Enter which type of account you registered:
+
+A -- STANDARD ACCOUNT
+
+	-Consists of a site name, username, password, and URL.
+
+D -- DESCRIBED STANDARD ACCOUNT
+
+	-Consists of the same attributes as standard AND a brief description.
+
+S -- SUBSCRIPTION TO A PAID SERVICE
+
+	-Consists of all above attributes AND an expiration date and monthly cost.
+
+**********************************************************
+
+
+
+Selection:  S
+
+
+
+Now you must enter all the attributes of your new account individually.
+
+Please enter the name of the site you registered the account.
+
+isgiubdg
+
+
+
+Please enter your username for isgiubdg
+
+erherheh
+
+
+
+Would you like the system to generate a random password?
+
+Enter Y for yes, or N to enter your own password.
+
+Selection:  ertioertkebrg             T
+
+
+
+Please enter your new password.
+
+oirhturouerb
+
+
+
+Please enter the home URL of isgiubdg
+
+owbtbwrobeirn
+
+
+
+Please enter a brief, single-line description of isgiubdg
+
+wrbi drghkd hkeh d hgkdf hk dih erh
+
+
+
+Please enter the expiration date of the subscription to isgiubdg
+
+02/12/1234
+
+
+
+Please enter the monthly fee of the subscription to 
+
+$ 44.54
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  T p
+
+
+
+You have opted to print all your accounts to the screen.
+
+***Front Of List***
+
+
+
+
+
+Site Name:  facebook
+
+User Name:  king.matt
+
+Password:  juniper
+
+Site URL:  www.facebook.com
+
+
+
+
+
+Site Name:  isgiubdg
+
+User Name:  erherheh
+
+Password:  oirhturouerb
+
+Site URL:  owbtbwrobeirn
+
+Site Description:  wrbi drghkd hkeh d hgkdf hk dih erh
+
+Expiration Date:  02/12/1234
+
+Monthly Fee:  $44.54
+
+
+
+
+
+Site Name:  Netflix
+
+User Name:  kingMatt@gmail.com
+
+Password:  berkScountyProPhet
+
+Site URL:  www.netflix.com
+
+Site Description:  Stream films and television shows on demand
+
+Expiration Date:  11/26/2012 (with automatic monthly renewal
+
+Monthly Fee:  $8.99
+
+
+
+
+
+Site Name:  Trigger
+
+User Name:  alestorm
+
+Password:  w&A4)r>Yb7l-b,
+
+Site URL:  www.trigger.com
+
+Site Description:  You buy guns here, it's pretty obvious
+
+
+
+
+
+Site Name:  umbrella
+
+User Name:  rainsAPain
+
+Password:  IhATErAIN
+
+Site URL:  www.umbrella.gov
+
+Site Description:  It emails me a weekly newsletter advertising government grade umbrellas! SO USEFUL!
+
+Expiration Date:  12/21/2012
+
+Monthly Fee:  $15.99
+
+
+
+
+
+***End Of List***
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  r
+
+
+
+You have opted to remove an account from the system.
+
+
+
+Please enter the name of the site for the account you want to remove.
+
+isgisu  udbg
+
+
+
+Account not found in the list. Would you like to return to the main menu or search again? (R/S)?
+
+isgiubdg
+
+R S
+
+
+
+Please enter the name of the site for the account you want to remove.
+
+isgiubdg
+
+
+
+Nyan security has found the account you searched for:
+
+Site Name:  isgiubdg
+
+User Name:  erherheh
+
+Password:  oirhturouerb
+
+Site URL:  owbtbwrobeirn
+
+Site Description:  wrbi drghkd hkeh d hgkdf hk dih erh
+
+Expiration Date:  02/12/1234
+
+Monthly Fee:  $44.54
+
+
+
+Are you sure you'd like to remove it (Y/N)?
+
+Y
+
+
+
+The operation completed successfully.
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  A
+
+
+
+You have opted to add a new account to the system.
+
+
+
+**********************************************************
+
+Enter which type of account you registered:
+
+A -- STANDARD ACCOUNT
+
+	-Consists of a site name, username, password, and URL.
+
+D -- DESCRIBED STANDARD ACCOUNT
+
+	-Consists of the same attributes as standard AND a brief description.
+
+S -- SUBSCRIPTION TO A PAID SERVICE
+
+	-Consists of all above attributes AND an expiration date and monthly cost.
+
+**********************************************************
+
+
+
+Selection:  d
+
+
+
+Now you must enter all the attributes of your new account individually.
+
+Please enter the name of the site you registered the account.
+
+pre   Home      Home Soit   ite of Roger Pressmane = 
+
+
+
+Please enter your username for Home Site of Roger Pressman
+
+iHe  <3Rod  oger    OGER
+
+
+
+Would you like the system to generate a random password?
+
+Enter Y for yes, or N to enter your own password.
+
+Selection:  n
+
+
+
+Please enter your new password.
+
+h3sSuchAHunk
+
+
+
+Please enter the home URL of Home Site of Roger Pressman
+
+www.rogr Pressman.com
+
+
+
+Please enter a brief, single-line description of Home Site of Roger Pressman
+
+Verbose         Roger Pressman                We get to           The home site of the lege    legendary most knowled            software enginn eeringh    mast! er! We      !
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  P
+
+
+
+You have opted to print all your accounts to the screen.
+
+***Front Of List***
+
+
+
+
+
+Site Name:  facebook
+
+User Name:  king.matt
+
+Password:  juniper
+
+Site URL:  www.facebook.com
+
+
+
+
+
+Site Name:  Home Site of Roger Pressman
+
+User Name:  i<3ROGER
+
+Password:  h3sSuchAHunk
+
+Site URL:  www.rogPressman.com
+
+Site Description:  The home site of the legendary software engineering master!
+
+
+
+
+
+Site Name:  Netflix
+
+User Name:  kingMatt@gmail.com
+
+Password:  berkScountyProPhet
+
+Site URL:  www.netflix.com
+
+Site Description:  Stream films and television shows on demand
+
+Expiration Date:  11/26/2012 (with automatic monthly renewal
+
+Monthly Fee:  $8.99
+
+
+
+
+
+Site Name:  Trigger
+
+User Name:  alestorm
+
+Password:  w&A4)r>Yb7l-b,
+
+Site URL:  www.trigger.com
+
+Site Description:  You buy guns here, it's pretty obvious
+
+
+
+
+
+Site Name:  umbrella
+
+User Name:  rainsAPain
+
+Password:  IhATErAIN
+
+Site URL:  www.umbrella.gov
+
+Site Description:  It emails me a weekly newsletter advertising government grade umbrellas! SO USEFUL!
+
+Expiration Date:  12/21/2012
+
+Monthly Fee:  $15.99
+
+
+
+
+
+***End Of List***
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  E
+
+You have opted to exit the program. Saving changes.
+
+Writing data to file......
+
+Closing program...
+
+bash-3.2$ ./NYAN
+
+WELCOME TO NYAN SECURITY'S PASSWORD MANAGER!
+
+
+
+At each menu screen, enter the character that represents menu item you would like to select.
+
+
+
+
+
+Are you a new user or an existing user?
+
+**********************************
+
+L - LOGIN
+
+C - CREATE NEW PROFILE
+
+**********************************
+
+C
+
+
+
+
+
+You have opted to create a new user profile.
+
+
+
+Please enter your desired username for your new profile.
+
+The     SmithJ2
+
+
+
+Please enter your desired master password for your account.
+
+
+
+Would you like the system to generate a random password?
+
+Enter Y for yes, or N to enter your own password.
+
+Selection:  N N
+
+
+
+Please enter your new password.
+
+pass  
+
+
+
+
+
+Nyan Security is now logged into the system ready state.
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  A
+
+
+
+You have opted to add a new account to the system.
+
+
+
+**********************************************************
+
+Enter which type of account you registered:
+
+A -- STANDARD ACCOUNT
+
+	-Consists of a site name, username, password, and URL.
+
+D -- DESCRIBED STANDARD ACCOUNT
+
+	-Consists of the same attributes as standard AND a brief description.
+
+S -- SUBSCRIPTION TO A PAID SERVICE
+
+	-Consists of all above attributes AND an expiration date and monthly cost.
+
+**********************************************************
+
+
+
+Selection:  A
+
+
+
+Now you must enter all the attributes of your new account individually.
+
+Please enter the name of the site you registered the account.
+
+testCreate
+
+
+
+Please enter your username for testCreate
+
+t testing
+
+
+
+Would you like the system to generate a random password?
+
+Enter Y for yes, or N to enter your own password.
+
+Selection:  n
+
+
+
+Please enter your new password.
+
+suc   SUCCESS
+
+
+
+Please enter the home URL of testCreate
+
+www.s successorfailure.com
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  R E R
+
+
+
+************************************************
+
+		MAIN MENU
+
+Enter the character that corresponds to 
+
+the functionality you would like to carry out.
+
+
+
+A - ADD AN ACCOUNT
+
+P - PRINT ALL ACCOUNTS TO SCREEN
+
+R - REMOVE AN ACCOUNT
+
+S - SEARCH FOR AN ACCOUNT
+
+E - SAVE CHANGES AND EXIT PROGRAM
+
+************************************************
+
+Selection:  p
+
+
+
+You have opted to print all your accounts to the screen.
+
+***Front Of List***
+
+
+
+
+
+Site Name:  testCreate
+
+User Name:  testing
+
+Password:  SUCCESS
+
+Site URL:  www.successorfailure.com
+
+
+
+
+
+***End Of List***
+
+
+
+Would you like to return to the main menu?
+
+Enter R to return or E to exit.
+
+Selection:  E
+
+You have opted to exit the program. Saving changes.
+
+Writing data to file......
+
+Closing program...
+
+bash-3.2$ exit
+
+exit
+
+
+Script done on Fri Nov 30 18:14:01 2012

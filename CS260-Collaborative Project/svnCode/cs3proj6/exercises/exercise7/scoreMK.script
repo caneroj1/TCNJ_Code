@@ -1,0 +1,72 @@
+Script started on Tue Sep 18 17:11:02 2012
+[?1034hbash-3.2$ ./scoreExecMK[C[C[C[C[C[C[C[C[C[Cg++ scoreDriver.cpp scoreFunctions.cpp -o scoreExecMK
+bash-3.2$ ./scoreExec
+bash: ./scoreExec: No such file or directory
+bash-3.2$ ./scoreExecMK
+Input the degree of difficulty for this event (between 1.2 and 3.8): 4.5
+The degree of difficulty is invalid. Please try again.
+Input the degree of difficulty for this event (between 1.2 and 3.8): 1.1
+The degree of difficulty is invalid. Please try again.
+Input the degree of difficulty for this event (between 1.2 and 3.8): fgh
+*** Invalid Input *** Please enter a float value: dfhhh
+*** Invalid Input *** Please enter a float value: 3.0
+Input the number of judges for this event (between 5 and 10): 1
+There may not be less than 5 or more than 10 judges.
+Input the number of judges for this event (between 5 and 10): 2
+There may not be less than 5 or more than 10 judges.
+Input the number of judges for this event (between 5 and 10): 143
+There may not be less than 5 or more than 10 judges.
+Input the number of judges for this event (between 5 and 10): 333
+There may not be less than 5 or more than 10 judges.
+Input the number of judges for this event (between 5 and 10): 2352
+There may not be less than 5 or more than 10 judges.
+Input the number of judges for this event (between 5 and 10): 9 10
+Input the scores given by each judge (between 0 and 10): rt
+*** Invalid Input *** Please enter a float value: erdf
+*** Invalid Input *** Please enter a float value: 15.3
+The score is invalid. Please try again.
+-01.03
+The score is invalid. Please try again.
+0 6.7
+1.2
+6.8
+6.5
+7.0
+9.9
+7.1
+6.7
+6.8
+6.6
+The final score for the competitor is 97.56
+Do you want to continue? Type Y or N : y
+Input the degree of difficulty for this event (between 1.2 and 3.8): 1.7
+Input the number of judges for this event (between 5 and 10): 5
+Input the scores given by each judge (between 0 and 10): 7.7
+6.9
+6.5   8.1
+8.0
+7.9
+The final score for the competitor is 24.072
+Do you want to continue? Type Y or N : n
+Exiting program.
+
+bash-3.2$ whoops, forgot to c[Kset precision....c[K[Klemme k[K[K[K[K[Kt me change that
+bash: whoops,: command not found
+bash-3.2$ whoops, forgot to set precision...let me change that[C[C[C[C[C[C[C[C[C[C./scoreExecMK[K[Kg++ scoreDriver.cpp scoreFunctions.cpp -o scoreExecMK
+bash-3.2$ g++ scoreDriver.cpp scoreFunctions.cpp -o scoreExecMK[C[C[C[C[C[C[C[C[C[C[1Pwhoops, forgot to set precision...let me change that[C[C[C[C[C[C[C[C[C[C./scoreExecMK[K
+Input the degree of difficulty for this event (between 1.2 and 3.8): 3.4
+Input the number of judges for this event (between 5 and 10): 5
+Input the scores given by each judge (between 0 and 10): pretzel    kr
+*** Invalid Input *** Please enter a float value: 6.5   9.9
+9.9
+9.9
+9.9
+9.9
+The final score for the competitor is 60.59
+Do you want to continue? Type Y or N : n
+Exiting program.
+
+bash-3.2$ exit
+exit
+
+Script done on Tue Sep 18 17:20:50 2012

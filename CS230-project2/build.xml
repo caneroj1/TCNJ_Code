@@ -1,0 +1,31 @@
+<project name="project2" default="run">
+	<target name="compile" depends="who">
+		<javac srcdir="."/>
+	</target>
+	
+	<target name="run" depends= "compile"> 
+		<java classname="Driver" classpath= "." fork="yes" maxmemory="4g"/>
+	</target>
+	
+	<target name="clean"> 
+		<delete>
+			<fileset dir="." includes="**/*.class"/>
+			<fileset dir="." includes="**/*.~"/>
+			<fileset dir="." includes="**/*.jar"/>
+			<fileset dir="." includes="**/*.txt"/>
+			<fileset dir="." includes="**/*.zip"/>
+			<fileset dir="newsgroups" includes="**/*"/>
+			<fileset dir="META-INF" includes="**/*"/>
+			
+		</delete>
+	</target> 
+	
+	<target name="who" depends="getInput">
+		<echo message="Joseph Canero"/>
+	</target>
+	
+	<target name="getInput">
+		<get src="http://s3.amazonaws.com/depasquale/datasets/newsgroups.zip" dest="newsgroups.zip" verbose="true"/>
+		<unzip src="newsgroups.zip" dest="."/>
+	</target>
+</project>

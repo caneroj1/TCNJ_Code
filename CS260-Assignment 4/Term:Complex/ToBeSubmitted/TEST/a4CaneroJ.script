@@ -1,0 +1,62 @@
+Script started on Sat Oct 13 21:55:49 2012
+bash-3.2$ g++ Driver.cpp -o DriverExec
+bash-3.2$ ./DriverExec 
+How many terms in this polynomial? 3
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 2
+Enter the degree for the term (0-10): 3
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: 4
+Enter the degree for the term (0-10): 5
+
+Enter the data for term 3 of the polynomial.
+Enter the coefficient for the term: 6
+Enter the degree for the term (0-10): 7
+Term count is: 3
+How many terms in this polynomial? 2
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 1
+Enter the degree for the term (0-10): 3
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: 6
+Enter the degree for the term (0-10): 7
+Term count is: 2
+Polynomial 1: 6x^7 + 4x^5 + 2x^3
+
+Polynomial 2: 6x^7 + 1x^3
+
+Entering Polynomial 2 from a file. 
+What is the name of the file? textPoly2.txt
+Polynomial 2 after reading from the file: 3x^9 + 4x^3 + 1x^2 + 2x^1 
+
+When adding Polynomials 1 and 2, the result is: 
+3x^9 + 6x^7 + 4x^5 + 6x^3 + 1x^2 + 2x^1 
+
+Setting Polynomial 1 equal to Polynomial 2...
+Polynomial 1: 3x^9 + 4x^3 + 1x^2 + 2x^1 
+
+Polynomial 2: 3x^9 + 4x^3 + 1x^2 + 2x^1 
+
+When multiplying Polynomials 1 and 2, the result is: 9x^18 + 24x^12 + 3x^11 + 6x^10  + 16x^6 + 4x^5 + 8x^4  
+
+When multiplying Polynomial 1 by a number, the result is: 27x^9 + 36x^3 + 9x^2 + 18x^1 
+
+When multiplying a number by Polynomial 1, the result is: 9x^9 + 12x^3 + 3x^2 + 6x^1 
+
+When adding Polynomial 1 to a number, the result is: 3x^9 + 4x^3 + 1x^2 + 2x^1  + 5
+
+When adding a number to Polynomial 2, the result is: 3x^9 + 4x^3 + 1x^2 + 2x^1  + 7
+
+Let's evalulate Polynomial 1 for a value. Please enter a value: 1
+
+Evaluating Polynomial 1 for x = 1 returns: 10
+Writing Polynomial 1 to a file. Writing to file.
+Thank you for using this program!
+bash-3.2$ exit
+exit
+
+Script done on Sat Oct 13 21:57:03 2012

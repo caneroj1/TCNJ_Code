@@ -1,0 +1,29 @@
+<project name="project3" default="run">
+	<target name="compile" depends="clean"> 
+		
+		<javac srcdir="." includeantruntime="false"/>
+	</target>
+
+	<target name="clean"> 
+		
+		<delete>
+			<fileset dir="." includes="**/*.class"/> 
+			<fileset dir="." includes="**/*.txt"/> 
+			<fileset dir="." includes="**/*.jar"/> 
+			<fileset dir="." includes="**/*.*~" defaultexcludes="false"/>
+		
+			
+		</delete>
+		<delete dir="META-INF"/>
+	</target> 
+	
+	<target name="run" depends="compile, who">
+	
+		<java classname="edu.tcnj.caneroj1.Driver" classpath="." fork="yes"/>
+	</target>
+	
+	<target name="who">
+	
+		<echo message = " Joe Canero"/>
+	</target>
+</project>

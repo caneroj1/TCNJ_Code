@@ -1,0 +1,14 @@
+<project name="lab5" default="compile">
+	<target name="compile" depends="clean">
+		<javac srcdir="."/>
+	</target>
+	<target name="run" depends= "compile"> 
+		<java classname="Driver" classpath= "."/>
+
+	</target>
+	<target name="clean"> 
+		<delete>
+			<fileset dir="." includes="**/*.class"/>
+		</delete>
+	</target> 
+</project>

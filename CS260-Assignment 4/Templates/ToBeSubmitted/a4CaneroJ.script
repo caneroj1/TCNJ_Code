@@ -1,0 +1,402 @@
+Script started on Fri Oct 26 13:26:30 2012
+bash-3.2$ make -f Makefile.txt 
+make: `all' is up to date.
+bash-3.2$ ./programExec 
+Entering Polynomial 1 (INTEGER): 
+How many terms in this polynomial? 2
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 1
+Enter the degree for the term (Degree >= 0): 2
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: 3
+Enter the degree for the term (Degree >= 0): 4
+3x^4 + 1x^2
+
+Entering Polynomial 2 (FLOAT): 
+How many terms in this polynomial? 3
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 1.4
+Enter the degree for the term (Degree >= 0): 5
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: 6.7
+Enter the degree for the term (Degree >= 0): 8
+
+Enter the data for term 3 of the polynomial.
+Enter the coefficient for the term: 2.1
+Enter the degree for the term (Degree >= 0): 3
+6.7x^8 + 1.4x^5 + 2.1x^3
+
+Entering Polynomial 3 (COMPLEX): 
+How many terms in this polynomial? 2
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: Enter an integer for the real constant: 1
+Enter an integer for the imaginary coefficient: 2
+Enter the degree for the term (Degree >= 0): 3
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: Enter an integer for the real constant: 0 -4
+Enter an integer for the imaginary coefficient: 5
+Enter the degree for the term (Degree >= 0): 5
+(-4 + 5i)x^5 + (1 + 2i)x^3
+
+Entering Polynomial 4 (INTEGER): 
+How many terms in this polynomial? 3
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 1
+Enter the degree for the term (Degree >= 0): 2
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: 7
+Enter the degree for the term (Degree >= 0): 8
+
+Enter the data for term 3 of the polynomial.
+Enter the coefficient for the term: 9
+Enter the degree for the term (Degree >= 0): 12
+9x^12 + 7x^8 + 1x^2
+
+Entering Polynomial 5 (FLOAT): 
+How many terms in this polynomial? 2
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 1.1
+Enter the degree for the term (Degree >= 0): 10
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: 2.78
+Enter the degree for the term (Degree >= 0): 11
+2.78x^11 + 1.1x^10
+
+Entering Polynomial 6 (COMPLEX): 
+How many terms in this polynomial? 1
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: Enter an integer for the real constant: -2 -3
+Enter an integer for the imaginary coefficient: Enter the degree for the term (Degree >= 0): 4
+(-2 - 3i)x^4
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+m
+Multiply which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+c
+
+Polynomial 3 (COMPLEX) and Polynomial 6 (COMPLEX) multiplied together is: 
+(23 + 2i)x^9 + (4 - 7i)x^7
+
+Multiplying Polynomial 3 (COMPLEX) by an integer.
+Enter the integer: 10
+Polynomial 3 (COMPLEX) multiplied by 10 is: 
+(-40 + 50i)x^5 + (10 + 20i)x^3
+
+Multiplying an integer by Polynomial 6 (COMPLEX)
+Enter the integer: 2
+2 multiplied by Polynomial 6 (COMPLEX) is: 
+(-4 - 6i)x^4
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+m
+Multiply which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Polynomial 1 (INTEGER) and Polynomial 4 (INTEGER) multiplied together is: 
+27x^16 + 9x^14 + 21x^12 + 7x^10 + 3x^6 + 1x^4
+
+Multiplying Polynomial 1 (INTEGER) by an integer.
+Enter the integer: 10  -3
+Polynomial 1 (INTEGER) multiplied by -3 is: 
+-9x^4 -3x^2
+
+Multiplying an integer by Polynomial 4 (INTEGER)
+Enter the integer: 3
+3 multiplied by Polynomial 4 (INTEGER) is: 
+27x^12 + 21x^8 + 3x^2
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+m
+Multiply which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+f
+
+Polynomial 2 (FLOAT) and Polynomial 5 (FLOAT) multiplied together is: 
+18.626x^19 + 7.37x^18 + 3.892x^16 + 1.54x^15 + 5.838x^14 + 2.31x^13
+
+Multiplying Polynomial 2 (FLOAT) by a float.
+Enter the float: 1.7
+Polynomial 2 (FLOAT) multiplied by 3 is: 
+11.39x^8 + 2.38x^5 + 3.57x^3
+
+Multiplying a float by Polynomial 5 (FLOAT)
+Enter the float: 2.33
+2.33 multiplied by Polynomial 5 (FLOAT) is: 
+6.4774x^11 + 2.563x^10
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+a
+Add which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+c
+
+Polynomial 3 (COMPLEX) and Polynomial 6 (COMPLEX) added together is: 
+(-4 + 5i)x^5 (-2 - 3i)x^4 + (1 + 2i)x^3
+
+Adding Polynomial 3 (COMPLEX) to an integer.
+Enter the integer: 17
+Polynomial 3 (COMPLEX) added to 17 is: 
+(-4 + 5i)x^5 + (1 + 2i)x^3 + 17
+
+Adding an integer to Polynomial 6 (COMPLEX)
+Enter the integer: -20
+-20 added to Polynomial 6 (COMPLEX) is: 
+(-2 - 3i)x^4 -20
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+a
+Add which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Polynomial 1 (INTEGER) and Polynomial 4 (INTEGER) added together is: 
+9x^12 + 7x^8 + 3x^4 + 2x^2
+
+Adding Polynomial 1 (INTEGER) to an integer.
+Enter the integer: 50
+Polynomial 1 (INTEGER) added to 50 is: 
+3x^4 + 1x^2 + 50
+
+Adding an integer to Polynomial 4 (INTEGER)
+Enter the integer: -269
+-269 added to Polynomial 4 (INTEGER) is: 
+9x^12 + 7x^8 + 1x^2 -269
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+a
+Add which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+f
+
+Polynomial 2 (FLOAT) and Polynomial 5 (FLOAT) added together is: 
+2.78x^11 + 1.1x^10 + 6.7x^8 + 1.4x^5 + 2.1x^3
+
+Adding Polynomial 2 (FLOAT) to a float.
+Enter the float: 10.45
+Polynomial 2 (FLOAT) added to -269 is: 
+6.7x^8 + 1.4x^5 + 2.1x^3 + 10.45
+
+Adding a float to Polynomial 5 (FLOAT)
+Enter the float: -6.789
+-6.789 added to Polynomial 5 (FLOAT) is: 
+2.78x^11 + 1.1x^10 -6.789
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+v
+Evaluate which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+c
+
+Enter the value of x: 2
+
+Evaluating Polynomial 3 (COMPLEX) for x = 2 returns: (-120 + 176i)
+Evaluating polynomial 6 (COMPLEX) for x = 2 returns: (-32 - 48i)
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+v
+Evaluate which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Enter the value of x: 16
+
+Evaluating Polynomial 1 (INTEGER) for x = 16 returns: 196864
+Evaluating polynomial 4 (INTEGER) for x = 16 returns: 256
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+v
+Evaluate which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+f
+
+Enter the value of x: 3.4
+
+Evaluating Polynomial 2 (FLOAT) for x = 3.4 returns: 120367
+Evaluating polynomial 5 (FLOAT) for x = 3.4 returns: 2.17833e+06
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+f l
+Which type of Polynomial do you wish to read in from a file?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+c
+
+Overwriting Polynomial 3 (COMPLEX) from file.
+Polynomial 3 (COMPLEX) is now: 
+(2 + 3i)x^8 + (1 + 2i)x^4 (-1 + 6i)x^1
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+l
+Which type of Polynomial do you wish to read in from a file?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Choice of 3 files for input. Which file (1, 2, 3)?
+1
+
+Overwriting Polynomial 1 (INTEGER) from File 1.
+Polynomial 1 (INTEGER) is now: 
+-6x^8 + 4x^5 -2x^1 + 3
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+l
+Which type of Polynomial do you wish to read in from a file?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Choice of 3 files for input. Which file (1, 2, 3)?
+2
+
+Overwriting Polynomial 1 (INTEGER) from File 2.
+Polynomial 1 (INTEGER) is now: 
+3x^9 + 4x^3 + 1x^2 + 2x^1 
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+l
+Which type of Polynomial do you wish to read in from a file?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Choice of 3 files for input. Which file (1, 2, 3)?
+3
+
+Overwriting Polynomial 1 (INTEGER) from File 3.
+Polynomial 1 (INTEGER) is now: 
+0
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+r
+Reenter which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Entering Polynomial 1 (INTEGER): 
+How many terms in this polynomial? 1
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 35
+Enter the degree for the term (Degree >= 0): 6
+35x^6
+
+Entering Polynomial 4 (INTEGER): 
+How many terms in this polynomial? 2
+
+Enter the data for term 1 of the polynomial.
+Enter the coefficient for the term: 1
+Enter the degree for the term (Degree >= 0): 3
+
+Enter the data for term 2 of the polynomial.
+Enter the coefficient for the term: 2
+Enter the degree for the term (Degree >= 0): 5
+2x^5 + 1x^3
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+a
+Add which type of Polynomial?
+
+CHOICES: (c)omplex, (i)nteger, (f)loat
+i
+
+Polynomial 1 (INTEGER) and Polynomial 4 (INTEGER) added together is: 
+35x^6 + 2x^5 + 1x^3
+
+Adding Polynomial 1 (INTEGER) to an integer.
+Enter the integer: 117
+Polynomial 1 (INTEGER) added to 117 is: 
+35x^6 + 117
+
+Adding an integer to Polynomial 4 (INTEGER)
+Enter the integer: -56
+-56 added to Polynomial 4 (INTEGER) is: 
+2x^5 + 1x^3 -56
+
+What would you like to do?
+
+CHOICES: (m)ultiply, (a)dd, e(v)aluate, (r)eenter Polynomials, read from fi(l)e, e(x)it
+x
+Before exiting, some basic assignment statements will occur.
+
+Assigning Polynomial 4 (INTEGER) to Polynomial 1 (INTEGER).
+Assigning an integer to Polynomial 4 (INTEGER) Enter the integer: 23
+
+
+Polynomial 1 (INTEGER): 2x^5 + 1x^3
+
+Polynomial 4 (INTEGER): 23
+
+Assigning Polynomial 5 (FLOAT) to Polynomial 2 (FLOAT).
+Assigning a float to Polynomial 5 (FLOAT) Enter the float: 4.567
+
+
+Polynomial 2 (FLOAT): 2.78x^11 + 1.1x^10
+
+Polynomial 5 (FLOAT): 4.567
+
+Assigning Polynomial 6 (COMPLEX) to Polynomial 3 (COMPLEX).
+Assigning an integer to Polynomial 6 (COMPLEX) Enter the integer: 10
+
+
+Polynomial 3 (COMPLEX): (-2 - 3i)x^4
+
+Polynomial 6 (COMPLEX): 10
+
+
+
+Outputting Polynomial 1 to a file.
+Writing to file.
+Done.
+*********************************************************************************
+Execution Terminated. Exiting.
+bash-3.2$ exit
+exit
+
+Script done on Fri Oct 26 13:30:56 2012
