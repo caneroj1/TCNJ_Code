@@ -22,6 +22,7 @@ using namespace std;
 int main () {
     
     //numerical integration using the midpoint approximation, trapezoidal rule, or simpson's rule
+    //let f(x) = sqrt(1 + x^2)
     
     //variables for execution
     
@@ -31,7 +32,10 @@ int main () {
     char u = 'b';
     
     cout << "\n\n\n*****************************************************************\n\n            APPLICATION FOR NUMERICAL INTEGRATION." << endl;
-    cout << "           This will integrate a user-defined function...\n\n";
+    cout << "           This will integrate a user-defined function...\n";
+    
+    //change the next line to a string representing the integrand
+    cout << "Function: sqrt(1 + x^2)\n\n";
     
     getUserInput(a, b);
     getNumberSubdivisions(i);
