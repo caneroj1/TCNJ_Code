@@ -5,4 +5,6 @@ Projects and assignments written in Java and C++ while studying at The College o
 
 A few of the projects in here were challenges that I took on in my spare time. For example, my code on Numerical Integration allows you to integrate a user-defined function choosing from three numerical integration methods. Also, my Number System Converter code allows you to convert from one number system to another. For example, you can convert from hexadecimal to binary, binary to decimal, or even base 3 to base 7, to name a few options. 
 
+The folder Dota2_Script contains a Python script that I wrote to process information extracted from Dota2 matches that I've played in. More information about what this does is in that folder's readme.
+
 Need to add my mentored research project from Spring '13
