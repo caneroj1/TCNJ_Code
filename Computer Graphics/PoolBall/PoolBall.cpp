@@ -143,13 +143,10 @@ void PoolBall::setRadius(float r) {
 
 //Function to update the position of the ball using its velocity
 void PoolBall::updatePosition() {
-//    xLoc += xV - xLoc;
-//    yLoc += yV - yLoc;
-//    zLoc += zV - zLoc;
     xLoc += xV;
     yLoc += yV;
     zLoc += zV;
-
+    if(ballID == 6) std::cout << "XL: " << xLoc << " YL: " << yLoc << " ZL: " << zLoc << std::endl;
 }
 
 //Function to check if two PoolBall objects are the same. Each PoolBall object has an ID attribute that indicates which ball it is
@@ -160,15 +157,16 @@ bool PoolBall::operator!=(PoolBall Ball2) {
 
 //Function to determine if this pool ball is colliding with another pool ball at location (b2x, b2y, b2z)
 bool PoolBall::isColliding(PoolBall Ball2) {
-    /*std::cout << "BALL 1 ID: " << ballID << " BALL 2 ID: " << Ball2.ballID << std::endl;
-    std::cout << "IN COLLISION: BALL1 x y z " << xLoc << " " << yLoc << " " << zLoc << std::endl;
-    std::cout << "IN COLLISION: BALL2 x y z " << Ball2.xLoc << " " << Ball2.yLoc << " " << Ball2.zLoc <<std::endl;*/
+    
     //to determine if two uniform spheres are in a collision, it is as simple as determining if the distance between their centers is less than or equal to the diameter of a single ball
+    
     if(ballID == Ball2.ballID) return false; //ball cannot collide with itself
-    double centerDistance = sqrt( pow(xLoc + xV - Ball2.xLoc - Ball2.xV, 2) + pow(yLoc + yV - Ball2.yLoc - Ball2.yV, 2) + pow(zLoc - Ball2.zLoc, 2) ); //distance between the centers of the two pool balls
-    //std::cout << "checking the centers!" << centerDistance << std::endl;
+    
+    //distance between the centers of the two pool balls
+    double centerDistance = sqrt( pow(xLoc + xV - Ball2.xLoc - Ball2.xV, 2) + pow(yLoc + yV - Ball2.yLoc - Ball2.yV, 2) + pow(zLoc - Ball2.zLoc, 2) );
+    
     if (centerDistance <= 2*radius) return true; //ball is colliding
-    else return false;                              //ball is not colliding
+    else return false;                           //ball is not colliding
 }
 
 void PoolBall::drawBall() {

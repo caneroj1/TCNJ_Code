@@ -26,6 +26,7 @@
 
 using namespace std;
 
+void drawPockets();
 void drawPoolTable(); //declaration of function to draw the pool table
 void increaseAngle(); //declaration of function to increase of the ball's rotation
 void animate(int); //declaration of the function that calls the proper movement functions if the ball should be moving
@@ -34,6 +35,7 @@ void calculateVelocity(float, float); //declaration of function that computes th
 void checkCollisions(); //declaration of function that checks if there is a collision happening at each unit of time
 
 //Globals
+float pocketConst = 11.75; //constant that marks the location on the table where the ball goes into a pocket
 double angle = 3.0; //angle of the ball's rotation
 float cueRadius = 0.75; //radius of the cue ball
 bool animating = false; //condition determining if there is animation or not
@@ -254,7 +256,6 @@ void QuadtreeNode::clear() {
     if(SEChild != NULL) NEChild->clear();
     if(SEChild != NULL) SEChild->clear();
     delete this;
-    //cout << "CLEARING!!!!" << endl;
 }
 
 
@@ -305,6 +306,7 @@ void drawScene(void)
     glColor3f(0.0, 0.0, 0.0);
     
     drawPoolTable();
+    drawPockets();
     
     //draw all of the balls
     glColor3f(1.0, 1.0, 1.0); //white
@@ -315,6 +317,42 @@ void drawScene(void)
     glutSwapBuffers();
 }
 
+//this function will draw the pockets
+void drawPockets(void) {
+    
+    //top right pocket
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
+    glTranslatef(13.00, 13.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glutSolidSphere(1.0, 12.0, 12.0);
+    glPopMatrix();
+    
+    //top left pocket
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
+    glTranslatef(-13.00, 13.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glutSolidSphere(1.0, 12.0, 12.0);
+    glPopMatrix();
+    
+    //bottom right pocket
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
+    glTranslatef(13.00, -13.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glutSolidSphere(1.0, 12.0, 12.0);
+    glPopMatrix();
+    
+    //bottom left pocket
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
+    glTranslatef(-13.00, -13.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glutSolidSphere(1.0, 12.0, 12.0);
+    glPopMatrix();
+    
+}
 //this function draws the pool table
 void drawPoolTable(void) {
     glPushMatrix();
@@ -483,30 +521,58 @@ void animate(int someValue) {
     else t = 0; //reset the time since animation is stopping
 }
 
-//Function to check for collisions between all the balls and the walls
+//Function to check for collisions between all the balls and the walls, in addition to any corner or side pockets
 void checkCollisions() {
     
     //when there is a collision along the side walls, the x component must be negated
     //when there is a collision along the top or bottom walls, the y component must be negated
     ballsQuadtree.checkCollisions();
-    for (vector<PoolBall>::iterator iter1 = PoolBalls.begin(); iter1 != PoolBalls.end(); iter1++) {
-    }
     
     for(vector<PoolBall>::iterator iter = PoolBalls.begin(); iter != PoolBalls.end(); iter++) {
-        if(iter->getXLocation() + iter->getRadius() + iter->getXComponent()> rectSize) {
+        //this block will check if the ball is colliding with a wall, if not it will check if it is colliding with a pocket
+        //check if there is a collision with any of the walls
+        //right wall
+        if(iter->getXLocation() + iter->getRadius() + iter->getXComponent() > rectSize &&
+           (iter->getYLocation() <= pocketConst && iter->getYLocation() >= -pocketConst)) {
             iter->setXComponent(iter->getXComponent() * -1);
         }
-        
-        if(iter->getXLocation() - iter->getRadius() + iter->getXComponent() < -rectSize) {
+        //else if colliding in top or bottom right pockets
+        else if(iter->getXLocation() + iter->getRadius() + iter->getXComponent() > rectSize &&
+                (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
+            PoolBalls.erase(iter);
+        }
+    
+        //left wall
+        if(iter->getXLocation() - iter->getRadius() + iter->getXComponent() < -rectSize &&
+           (iter->getYLocation() <= pocketConst && iter->getYLocation() >= -pocketConst)) {
             iter->setXComponent(-1 * iter->getXComponent());
         }
-        
-        if(iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize) {
-            iter->setYComponent(-1 * iter->getYComponent());
+        //else if colliding in top or bottom left pockets
+        else if(iter->getXLocation() - iter->getRadius() - iter->getXComponent() < -rectSize &&
+                (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
+            PoolBalls.erase(iter);
         }
         
-        if(iter->getYLocation() - iter->getRadius() + iter->getYComponent() < -rectSize) {
+        //top wall
+        if(iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize &&
+           (iter-> getXLocation() <= pocketConst && iter->getXLocation() >= -pocketConst)) {
             iter->setYComponent(-1 * iter->getYComponent());
+        }
+        //else if colliding in top right or left pockets
+        else if (iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize &&
+                 (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst)) {
+            PoolBalls.erase(iter);
+        }
+        
+        //bottom wall
+        if(iter->getYLocation() - iter->getRadius() + iter->getYComponent() < -rectSize &&
+           (iter-> getXLocation() <= pocketConst && iter->getXLocation() >= -pocketConst)) {
+            iter->setYComponent(-1 * iter->getYComponent());
+        }
+        //else if colliding in bottom right and left pockets
+        else if (iter->getYLocation() - iter->getRadius() - iter->getYComponent() < -rectSize &&
+                 (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst)) {
+            PoolBalls.erase(iter);
         }
     }
     
