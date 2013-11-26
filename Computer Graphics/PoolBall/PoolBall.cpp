@@ -21,9 +21,13 @@ PoolBall::PoolBall(double xPos, double yPos, double zPos, int bID) {
     //initialize velocity components
     xV = yV = zV = 0;
     angle = 0;
+    
     //set radius and mass
     radius = 0.75;
     mass = 0.16;
+    
+    //ball is not marked
+    marked = false;
 }
 
 //Non-parameterized Constructor
@@ -94,6 +98,11 @@ int PoolBall::getID() {
     return ballID;
 }
 
+//Returns this ball's mark, indicates if it should be deleted or not
+bool PoolBall::isMarked() {
+    return marked;
+}
+
 //SETTERS
 
 //Setter for ball angle
@@ -149,6 +158,11 @@ void PoolBall::updatePosition() {
     if(ballID == 6) std::cout << "XL: " << xLoc << " YL: " << yLoc << " ZL: " << zLoc << std::endl;
 }
 
+//Function to mark the ball if it has been sunk into a pocket. It will be deleted
+void PoolBall::markBall() {
+    marked = true;
+}
+
 //Function to check if two PoolBall objects are the same. Each PoolBall object has an ID attribute that indicates which ball it is
 bool PoolBall::operator!=(PoolBall Ball2) {
     if (ballID != Ball2.ballID) return true;
@@ -163,7 +177,7 @@ bool PoolBall::isColliding(PoolBall Ball2) {
     if(ballID == Ball2.ballID) return false; //ball cannot collide with itself
     
     //distance between the centers of the two pool balls
-    double centerDistance = sqrt( pow(xLoc + xV - Ball2.xLoc - Ball2.xV, 2) + pow(yLoc + yV - Ball2.yLoc - Ball2.yV, 2) + pow(zLoc - Ball2.zLoc, 2) );
+    double centerDistance = sqrt( pow(xLoc + xV - (Ball2.xLoc + Ball2.xV), 2) + pow(yLoc + yV - (Ball2.yLoc + Ball2.yV), 2) + pow(zLoc - Ball2.zLoc, 2) );
     
     if (centerDistance <= 2*radius) return true; //ball is colliding
     else return false;                           //ball is not colliding
@@ -174,7 +188,7 @@ void PoolBall::drawBall() {
     glTranslatef(0.0, 0.0, -15.0);
     glTranslatef(xLoc, yLoc, zLoc);
     glRotatef(angle, yV, -xV, 0);
-    glutWireSphere(radius, 12, 10);
+    glutSolidSphere(radius, 12, 10);
     glPopMatrix();
     //std::cout << "Velocity: " << xV << std::endl;
 }

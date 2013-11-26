@@ -15,6 +15,9 @@
 //function to update the velocities of two pool balls if they are colliding
 void ComputeElasticCollision(PoolBall &Ball1, PoolBall &Ball2);
 
+//function to compute the scalar component of a projection
+double calcProjection(double, double, double, double);
+
 //function to compute the movement angle (theta) of a ball for use in the collision equations
 double calculateTheta(PoolBall Ball);
 

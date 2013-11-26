@@ -41,7 +41,8 @@ private:
     double angle;                               //angle of the ball's rotation
     float radius;                               //radius of a ball
     float mass;                                 //mass of a ball
-    int ballID;
+    int ballID;                                 //numerical integer ID of the ball
+    bool marked;                                //bool indicating this ball is marked for deleteion
     
 public:
     PoolBall();                                                     //default constructor
@@ -62,6 +63,7 @@ public:
     float getMass();         //get mass
     float getRadius();       //get radius
     int getID();             //get the ID
+    bool isMarked();
     
     //SETTERS
     void setXComponent(double xVel);  //functions to set the components of this ball's velocity, and angle
@@ -73,6 +75,7 @@ public:
     void setZLocation(double zL);
     void setMass(float m);  //function to set the ball's mass
     void setRadius(float r);   //function to set the ball's radius
+    void markBall();
 };
 
 #endif

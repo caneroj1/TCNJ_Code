@@ -1,14 +1,28 @@
-/////////////////////////////////
-// Joe Canero, CSC350, Assignment 5
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Joe Canero, CSC350, Final Project
 //
-// This program draws a cue ball on a pool table.
-// Clicking on the pool table will move the ball in a vector in the direction from the mouse
-// to the ball. The ball will slow down according to some coefficient of friction on the
-// table.
+// This program is going to simulate the playing of a game of billiards. The cue ball starts at the center of the
+// and the user's cue stick is denoted by a thick brown line between the location of the mouse and the center of
+// the cue ball. Clicking will hit the cue ball. The longer the cue stick becomes, the harder you will hit the cue
+// ball.
 //
-// The program also as collision checking that can test if the ball has reached the end of the
-// pool table and must have a new velocity
-/////////////////////////////////
+// I've also tried to implement a quad tree with this program to handle collisions between the balls. It's probably
+// not the best quad tree. :)
+//
+// I know you said that my proposal was unclear concerning my objectives, so can I make the following 5 items
+// my objectives for this project?
+//
+// At this stage of programming, I have achieved a few of my five objectives.
+// 1) DONE -- Implement collision checking between the balls on the table and the walls of the table
+// 2) DONE -- Be able to get balls into pockets and remove them from play
+// 3) DONE -- Be able to change the angle that the cue stick makes with the cue ball.
+// 4) NOT DONE -- Add texture to the balls, and to the table. Possibly look into making the walls look like wood.
+// 5) NOT DONE -- Add lighting to the simulation.
+//
+// Steps 4 and 5 will be implemented in the final project.
+// As of now, I can't get the cue stick to change its angle accurately when the user changes the angle that
+// the shot will have.
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
 #include <cmath>
@@ -26,34 +40,52 @@
 
 using namespace std;
 
-void drawPockets();
-void drawPoolTable(); //declaration of function to draw the pool table
-void increaseAngle(); //declaration of function to increase of the ball's rotation
-void animate(int); //declaration of the function that calls the proper movement functions if the ball should be moving
-void moveBall(int&); //declaration of function that finds the ball's new coordinates
-void calculateVelocity(float, float); //declaration of function that computes the initial velocity of the ball after it is hit
-void checkCollisions(); //declaration of function that checks if there is a collision happening at each unit of time
+//Function declarations
+void deleteBalls();
+void drawBalls();                                           //declaration of function to draw the balls of the table
+void drawPockets();                                         //declaration of function to draw the pockets
+void drawPoolTable();                                       //declaration of function to draw the pool table
+void increaseAngle();                                       //declaration of function to increase of the ball's rotation
+void animate(int);                                          //declaration of the function that calls the proper movement functions if the ball should
+                                                            //be moving
+void moveBall(int&);                                        //declaration of function that finds the ball's new coordinates
+void calculateVelocity(float, float);                       //declaration of function that computes the initial velocity of the ball after it is hit
+void checkCollisions();                                     //declaration of function that checks if there is a collision happening at each unit of time
 
 //Globals
-float pocketConst = 11.75; //constant that marks the location on the table where the ball goes into a pocket
-double angle = 3.0; //angle of the ball's rotation
-float cueRadius = 0.75; //radius of the cue ball
-bool animating = false; //condition determining if there is animation or not
-int width = 750; //width of viewing window
-int height = 500; //height of viewing window
-int frustumWidth = 5; //width of half of frustum
-int frustumHeight = 5; //height of half of frustum
-int widthRatio = width/(frustumWidth * 2); //ratio of pixels of viewing screen to units of frustum width
-int heightRatio = height/(frustumHeight * 2); //ratio of pixels of viewing screen to units of frustum height
-float pushIntoFrustumAmount = -15.0; //amount all objects are translated back into frustum
-float ratioOfFarPlaneToNear = -pushIntoFrustumAmount/5.0; //ratio of plane of translation to near plane
-float rectSize = 13.0; //size of pool table
-float frictionCo = 0.0005; //coefficient of friction on the pool table
-float frictionAmount = 0; //amount of friction at a given time
-float testFloat = 0.0085; //this float is used to test if the magnitude is sufficiently close to zero indicating the ball is almost coming to rest. making it smaller will make the ball move for longer, making it larger will stop motion prematurely.
-int t = 0; //parameter of the time of motion
-
-std::vector<PoolBall> PoolBalls; // a global vector of PoolBall objects
+double xC = 0.0;
+double yC = 0.0;
+double cueStartX = 0.0;                                     //x-coordinate of the cue ball's initial location
+double cueStartY = 0.0;                                     //y-coordinate of the cue ball's initial location
+double cueStickBeginX = 0.0;                                //x-coordinate of the begining of the pool stick (begins at user's mouse)
+double cueStickBeginY = 0.0;                                //y-coordinate of the beginning of the pool stick (begins at user's mouse)
+double cueStickEndX = 0.0;                                  //x-coordinate for the end of the pool stick (ends at the cue ball)
+double cueStickEndY = 0.0;                                  //y-coordiante for the end of the pool stick (ends at the cue ball)
+double cueStickLength = 0.0;                                //variable that maintains the length of the cue stick between shots
+double cueAngle = 0.0;                                      //angle of the shot. angle that the cue stick is making with the cue ball
+double shotAngle = 0.0;                                     //angle of rotation of the shot
+double a = cueStartX;                                       //this variable is the x coordinate of the end of the pool cue
+double b = cueStartY;                                       //this variable is the y coordinate of the end of the pool cue
+float pocketConst = 11.75;                                  //constant that marks the location on the table where the ball goes into a pocket
+double angle = 3.0;                                         //angle of the ball's rotation
+float cueRadius = 0.75;                                     //radius of the cue ball
+bool animating = false;                                     //condition determining if there is animation or not
+int width = 750;                                            //width of viewing window
+int height = 500;                                           //height of viewing window
+int frustumWidth = 5;                                       //width of half of frustum
+int frustumHeight = 5;                                      //height of half of frustum
+int widthRatio = width/(frustumWidth * 2);                  //ratio of pixels of viewing screen to units of frustum width
+int heightRatio = height/(frustumHeight * 2);               //ratio of pixels of viewing screen to units of frustum height
+float pushIntoFrustumAmount = -15.0;                        //amount all objects are translated back into frustum
+float ratioOfFarPlaneToNear = -pushIntoFrustumAmount/5.0;   //ratio of plane of translation to near plane
+float rectSize = 13.0;                                      //size of pool table
+float frictionCo = 0.00005;                                 //coefficient of friction on the pool table
+float frictionAmount = 0;                                   //amount of friction at a given time
+float testFloat = 0.0085;                                   //this float is used to test if the magnitude is sufficiently close to zero
+                                                            //indicating the ball is almost coming to rest. making it smaller will make the ball
+                                                            //move for longer, making it larger will stop motion prematurely.
+int t = 0;                                                  //parameter of the time of motion
+std::vector<PoolBall> PoolBalls;                            // a global vector of PoolBall objects
 const int NUMBALLS = 2;
 
 // Return 1 if the axes-parallel rectangle with diagonally opposite corners at (x1,y1) and (x2,y2)
@@ -139,6 +171,7 @@ int QuadtreeNode::numberBallsIntersected()
                 numVal++;
         }
     }
+    cout << numVal << endl;
     return numVal;
 }
 
@@ -165,8 +198,8 @@ void QuadtreeNode::build()
     else
     {
         SWChild = new QuadtreeNode(SWCornerX, SWCornerY, size/2.0);
-        NWChild = new QuadtreeNode(SWCornerX, SWCornerY - size/2.0, size/2.0);
-        NEChild = new QuadtreeNode(SWCornerX + size/2.0, SWCornerY - size/2.0, size/2.0);
+        NWChild = new QuadtreeNode(SWCornerX, SWCornerY + size/2.0, size/2.0);
+        NEChild = new QuadtreeNode(SWCornerX + size/2.0, SWCornerY + size/2.0, size/2.0);
         SEChild = new QuadtreeNode(SWCornerX + size/2.0, SWCornerY, size/2.0);
         
         SWChild->build(); NWChild->build(); NEChild->build(); SEChild->build();
@@ -307,18 +340,69 @@ void drawScene(void)
     
     drawPoolTable();
     drawPockets();
+    drawBalls();
+    
+    if(!animating) { //only draw the cue when we are able to take a shot
+        glColor3f(139.0/256.0, 69.0/256.0, 19.0/256.0);
+        glLineWidth(2.0);
+        glBegin(GL_LINES);
+        glVertex3f(cueStickBeginX, cueStickBeginY, pushIntoFrustumAmount+1);
+        glVertex3f(cueStickEndX, cueStickEndY, pushIntoFrustumAmount+1);
+        glEnd();
+    }
+    
+    glutSwapBuffers();
+}
+
+//this function will draw the balls
+void drawBalls(void) {
+    
+    // Colors of the balls of the pool table. The balls are all red for now.
+    
+    /*****************************************/
+    
+    float matAmbAndDif[] = { 0.8, 0.8, 0.8, 1.0 };
+    float matSpec[] = { 1.0, 1.0, 1.0, 1.0 };
+    float matShine[] = { 30.0 };
+    
+    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+    
+    /*****************************************/
     
     //draw all of the balls
     glColor3f(1.0, 1.0, 1.0); //white
+    glLineWidth(1.0);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     for (vector<PoolBall>::iterator iter1 = PoolBalls.begin(); iter1 != PoolBalls.end(); iter1++) {
-        iter1->updatePosition();
-        iter1->drawBall();
+        if(!(iter1->isMarked())) {
+            iter1->updatePosition();
+            iter1->drawBall();
+        }
     }
-    glutSwapBuffers();
+    glDisable(GL_CULL_FACE);
 }
 
 //this function will draw the pockets
 void drawPockets(void) {
+    
+    // Manage the colors of the pockets of the pool table. The pockets are black with no shininess.
+    
+    /*****************************************/
+    
+    float matAmbAndDifPocket[] = { 0.0, 0.0, 0.0, 1.0 };
+    float matSpecPocket[] = { 0.0, 0.0, 0.0, 0.0 };
+    float matShinePocket[] = { 0.0 };
+    
+    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDifPocket);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDifPocket);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecPocket);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShinePocket);
+    
+    /*****************************************/
     
     //top right pocket
     glPushMatrix();
@@ -352,9 +436,41 @@ void drawPockets(void) {
     glutSolidSphere(1.0, 12.0, 12.0);
     glPopMatrix();
     
+    //top middle pocket
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
+    glTranslatef(0.0, 13.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glutSolidSphere(1.0, 12.0, 12.0);
+    glPopMatrix();
+    
+    //bottom middle pocket
+    glPushMatrix();
+    glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
+    glTranslatef(0.0, -13.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glutSolidSphere(1.0, 12.0, 12.0);
+    glPopMatrix();
+    
 }
 //this function draws the pool table
 void drawPoolTable(void) {
+    
+    // Manage the color of the pool table itself. The table is a green with no shininess.
+    
+    /*****************************************/
+    
+    float matAmbAndDifTable[] = { 0.2, 1.0, 0.2, 1.0 };
+    float matSpecTable[] = { 0.0, 0.0, 0.0, 1.0 };
+    float matShineTable[] = { 0.0 };
+    
+    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDifTable);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDifTable);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecTable);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShineTable);
+    
+    /*****************************************/
+    
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount); //translate everything into the frustum
     
@@ -365,6 +481,21 @@ void drawPoolTable(void) {
     
     glColor3f(0.80, 0.60, 0.0); //color of the walls of the table
     
+    // Manage the color of the walls of the pool table. The walls are a brown with no shininess.
+    
+    /*****************************************/
+    
+    float matAmbAndDifWalls[] = { 0.8, 0.6, 0.0, 1.0 };
+    float matSpecWalls[] = { 0.0, 0.0, 0.0, 1.0 };
+    float matShineWalls[] = { 0.0 };
+    
+    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDifWalls);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDifWalls);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecWalls);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShineWalls);
+    
+    /*****************************************/
+
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount); //translate everything into the frustum
     
@@ -397,14 +528,61 @@ void drawPoolTable(void) {
     glRectf(-13.25, -0.3, 13.25, 0.3);
     
     glPopMatrix();
+    
+    //draw additional boundaries on the outside of the pool table so the pockets look better
+    //right boundary
+    glPushMatrix();
+    glTranslatef(15.50, 0.0, pushIntoFrustumAmount - 2); //translate into the frustum
+    glRectf(-0.5, -16.15, 0.5, 16.15);
+    glPopMatrix();
+    
+    //left boundary
+    glPushMatrix();
+    glTranslatef(-15.50, 0.0, pushIntoFrustumAmount - 2); //translate into the frustum
+    glRectf(-0.5, -16.15, 0.5, 16.15);
+    glPopMatrix();
+    
+    //top boundary
+    glPushMatrix();
+    glTranslatef(0.0, 15.5, pushIntoFrustumAmount - 2); //translate into the frustum
+    glRotatef(90.0, 0.0, 0.0, 1.0);
+    glRectf(-0.72, -15.70, 0.72, 15.70);
+    glPopMatrix();
+    
+    //bottom boundary
+    glPushMatrix();
+    glTranslatef(0.0, -15.5, pushIntoFrustumAmount - 2); //translate into the frustum
+    glRotatef(90.0, 0.0, 0.0, 1.0);
+    glRectf(-0.72, -15.70, 0.72, 15.70);
+    glPopMatrix();
 }
 
 // Initialization routine.
 void setup(void)
 {
+    /*****************************************/
+    
+    glEnable(GL_LIGHTING);
+    
+    float lightAmb[] = { 0.0, 0.0, 0.0, 0.0 };
+    float DifAndSpec[] = { 1.0, 1.0, 1.0, 1.0 };
+    float lightPos[] = { 0.0, 0.0, 0.0, 1.0 };
+    float globAmb[] = { 0.5, 0.5, 0.5, 1 };
+    
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, DifAndSpec);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, DifAndSpec);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globAmb);
+    
+    glEnable(GL_LIGHT0);
+    
+    /*****************************************/
+    
     //put all of the balls to be used into the PoolBalls vector
-    PoolBalls.push_back(PoolBall(0.0, 0.0, 0.0, 1));
-    PoolBalls.push_back(PoolBall(10.0, 0.0, 0.0, 2));
+    PoolBalls.push_back(PoolBall(cueStartX, cueStartY, 0.0, 1));
+    /*PoolBalls.push_back(PoolBall(10.0, 0.0, 0.0, 2));
     PoolBalls.push_back(PoolBall(12.0, 0.0, 0.0, 3));
     PoolBalls.push_back(PoolBall(8.0, 0.0, 0.0, 4));
     PoolBalls.push_back(PoolBall(8.0, 2.0, 0.0, 5));
@@ -420,9 +598,20 @@ void setup(void)
     PoolBalls.push_back(PoolBall(12.0, -4.0, 0.0, 15));
     PoolBalls.push_back(PoolBall(12.0, 6.0, 0.0, 16));
     PoolBalls.push_back(PoolBall(12.0, -6.0, 0.0, 17));
-                                 
-    ballsQuadtree.initialize(-rectSize, -rectSize, 2*rectSize); //initialize the quadtree for the first time
-    cout << "Interaction: Click anywhere on the table to \"hit\" the cue ball in the direction of the vector pointing from the mouse to the center of the ball. While the ball is moving, clicking again will stop the animation." << endl;
+    */
+    PoolBalls.push_back(PoolBall(6.0, 0.0, 0.0, 2));
+    PoolBalls.push_back(PoolBall(8.0, 1.0, 0.0, 3));
+    PoolBalls.push_back(PoolBall(8.0, -1.0, 0.0, 4));
+    PoolBalls.push_back(PoolBall(10.0, 2.0, 0.0, 5));
+    PoolBalls.push_back(PoolBall(10.0, 0.0, 0.0, 6));
+    PoolBalls.push_back(PoolBall(10.0, -2.0, 0.0, 7));
+    PoolBalls.push_back(PoolBall(12.0, 3.0, 0.0, 8));
+    PoolBalls.push_back(PoolBall(12.0, 1.0, 0.0, 9));
+    PoolBalls.push_back(PoolBall(12.0, -1.0, 0.0, 10));
+    PoolBalls.push_back(PoolBall(12.0, -3.0, 0.0, 11));
+    //initialize the quadtree for the first time
+    ballsQuadtree.initialize(-rectSize, -rectSize, 2*rectSize);
+    cout << "Interaction: Click anywhere on the table to \"hit\" the cue ball in the direction of the vector pointing from the mouse to the center of the ball. While the ball is moving, clicking again will stop the animation. You are able to change the angle that the cue stick makes with the cue ball, but it is not reflected visually. Press \"A\" to angle the cue to the left, or press \"S\" to angle the cue to the right. If you get a ball in the pocket, it is removed from play. Scratches are not implemented yet." << endl;
     glClearColor(1.0, 1.0, 1.0, 0.0);
 }
 
@@ -437,7 +626,7 @@ void resize(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
-// Keyboard input processing routine.
+// Keyboard input processing routine. Will handle the user input to increase angle of the sot
 void keyInput(unsigned char key, int x, int y)
 {
     switch(key)
@@ -445,8 +634,41 @@ void keyInput(unsigned char key, int x, int y)
         case 27:
             exit(0);
             break;
+        case 'a':
+            shotAngle -= PI/20; //increase angle of shot to the left
+            break;
+        case 's':
+            shotAngle += PI/20; //increase angle of the shot to the right
+            break;
         default:
             break;
+    }
+    if(shotAngle > PI/2.0) { shotAngle -= PI/20; cueAngle -= (asin(0.75/cueStickLength)/20); } //if angle exceeds PI/2, subtract what was just added to make it PI/2 again
+    else if(shotAngle < -PI/2.0) { shotAngle += PI/20; cueAngle += (asin(0.75/cueStickLength)/20); } //if angle exceeds -PI/2, add what was just substracted to make it -PI/2 again
+    if (key == 'a' || key == 's') {
+        glutPostRedisplay();
+    }
+}
+
+//Passive Motion Function
+void passiveMotion(int x, int y) {
+    if (!animating) {
+        vector<PoolBall>::iterator iter = PoolBalls.begin();
+       
+        yC = (height - y);
+        yC = (yC - (height/2.0)) / heightRatio;
+        yC *= ratioOfFarPlaneToNear; //ratio of how much Y values change between the planes
+        xC = (x - (width/2.0)) / widthRatio;
+        xC *= ratioOfFarPlaneToNear; //ratio of how much X values change between the planes
+       
+        cueStickBeginX = xC;
+        cueStickBeginY = yC;
+        cueStickEndX = iter->getXLocation();
+        cueStickEndX = cueStickEndX*cos(cueAngle) - cueStickEndY*sin(cueAngle);
+        cueStickEndY = iter->getYLocation();
+        cueStickEndY = cueStickEndY*sin(cueAngle) + cueStickEndY*cos(cueAngle);
+        cueStickLength = sqrt( pow(cueStickEndX - cueStickBeginX, 2) + pow(cueStickEndY - cueStickBeginY,2) );
+        glutPostRedisplay();
     }
 }
 
@@ -460,7 +682,7 @@ void mouseCallback(int button, int state, int x, int y) {
         if animation is happening and the left mouse key is pressed, the animation will
         stop
      */
-    
+
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && !animating) {
         animating = true;
         ballsQuadtree.initialize(-rectSize, -rectSize, 2*rectSize);
@@ -483,30 +705,32 @@ void increaseAngle() {
     //this function increases the angle of the ball's rotation
     //and if it exceeds 360, it wraps it around
     for (vector<PoolBall>::iterator iter = PoolBalls.begin(); iter != PoolBalls.end(); iter++) {
-        iter->setAngle(iter->getAngle() + t * (sqrt(pow(iter->getXComponent(),2) + pow(iter->getYComponent(), 2))));
-        if(iter->getAngle() > 360.0) iter->setAngle(iter->getAngle() - 360.0);
+        if(!(iter->isMarked())) {
+            iter->setAngle(iter->getAngle() + t * (sqrt(pow(iter->getXComponent(),2) + pow(iter->getYComponent(), 2))));
+            if(iter->getAngle() > 360.0) iter->setAngle(iter->getAngle() - 360.0);
+        }
     }
 }
 
 // Function to animate the scene if the animating bool says to
 void animate(int someValue) {
     
-    //reinitialize the quadtree at the beginning of each frame
+    //  reinitialize the quadtree at the beginning of each frame
     ballsQuadtree.initialize(-rectSize, -rectSize, 2*rectSize);
     
-    //if the velocity of the object is <= 0, stop animation because the ball has stopped
-    //need to use a small float to test if the magnitude is sufficiently close to 0.
-    //we want animation to stop only when all of the balls have effectively ceased moving
-    //this will loop through all of the balls to see if their animation is practically 0. it performs a compound OR operation
-    //that will result in animation continuing if at least 1 ball is still registered as moving
+    //  if the velocity of the object is <= 0, stop animation because the ball has stopped
+    //  need to use a small float to test if the magnitude is sufficiently close to 0.
+    //  we want animation to stop only when all of the balls have effectively ceased moving
+    //  this will loop through all of the balls to see if their animation is practically 0. it performs a compound OR operation
+    //  that will result in animation continuing if at least 1 ball is still registered as moving
     
-    //the variable testing will store the results of the compound OR. if animation is being initiated by a mouse click, the check will never happen: it
-    //will always go through with the animation. But if the animate method is being called through the glutTimerFunc, the compound OR check will happen. It will then AND testing with animating. If testing is a 1, that means at least one ball is moving and so animating will continue. If testing is a zero, then animating && testing will return a 0 and the animation will stop
+    /*  the variable testing will store the results of the compound OR. if animation is being initiated by a mouse click, the check will never happen: it will always go through with the animation. But if the animate method is being called through the glutTimerFunc, the compound OR check will happen. It will then AND testing with animating. If testing is a 1, that means at least one ball is moving and so animating will continue. If testing is a zero, then animating && testing will return a 0 and the animation will stop
+     */
     
     if(someValue) {
         bool testing = false;
         for (vector<PoolBall>::iterator iter = PoolBalls.begin(); iter != PoolBalls.end(); iter++) {
-                testing |= ((sqrt(pow(iter->getXComponent(),2) + pow(iter->getYComponent(), 2)) - testFloat) > 0);
+            if(!(iter->isMarked())) testing |= ((sqrt(pow(iter->getXComponent(),2) + pow(iter->getYComponent(), 2)) - testFloat) > 0);
         }
         animating &= testing;
     }
@@ -518,7 +742,13 @@ void animate(int someValue) {
         animating = 1;
         glutTimerFunc(25, animate, 1);
     }
-    else t = 0; //reset the time since animation is stopping
+    else {
+        t = 0; //  reset the time since animation is stopping
+               //  set all ball components to 0
+        for (vector<PoolBall>::iterator iter = PoolBalls.begin(); iter != PoolBalls.end(); iter++) {
+            if(!(iter->isMarked())) iter->setXComponent(0.0); iter->setYComponent(0.0);
+        }
+    }
 }
 
 //Function to check for collisions between all the balls and the walls, in addition to any corner or side pockets
@@ -529,55 +759,76 @@ void checkCollisions() {
     ballsQuadtree.checkCollisions();
     
     for(vector<PoolBall>::iterator iter = PoolBalls.begin(); iter != PoolBalls.end(); iter++) {
-        //this block will check if the ball is colliding with a wall, if not it will check if it is colliding with a pocket
-        //check if there is a collision with any of the walls
-        //right wall
-        if(iter->getXLocation() + iter->getRadius() + iter->getXComponent() > rectSize &&
-           (iter->getYLocation() <= pocketConst && iter->getYLocation() >= -pocketConst)) {
-            iter->setXComponent(iter->getXComponent() * -1);
-        }
-        //else if colliding in top or bottom right pockets
-        else if(iter->getXLocation() + iter->getRadius() + iter->getXComponent() > rectSize &&
-                (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
-            PoolBalls.erase(iter);
-        }
-    
-        //left wall
-        if(iter->getXLocation() - iter->getRadius() + iter->getXComponent() < -rectSize &&
-           (iter->getYLocation() <= pocketConst && iter->getYLocation() >= -pocketConst)) {
-            iter->setXComponent(-1 * iter->getXComponent());
-        }
-        //else if colliding in top or bottom left pockets
-        else if(iter->getXLocation() - iter->getRadius() - iter->getXComponent() < -rectSize &&
-                (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
-            PoolBalls.erase(iter);
-        }
-        
-        //top wall
-        if(iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize &&
-           (iter-> getXLocation() <= pocketConst && iter->getXLocation() >= -pocketConst)) {
-            iter->setYComponent(-1 * iter->getYComponent());
-        }
-        //else if colliding in top right or left pockets
-        else if (iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize &&
-                 (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst)) {
-            PoolBalls.erase(iter);
-        }
-        
-        //bottom wall
-        if(iter->getYLocation() - iter->getRadius() + iter->getYComponent() < -rectSize &&
-           (iter-> getXLocation() <= pocketConst && iter->getXLocation() >= -pocketConst)) {
-            iter->setYComponent(-1 * iter->getYComponent());
-        }
-        //else if colliding in bottom right and left pockets
-        else if (iter->getYLocation() - iter->getRadius() - iter->getYComponent() < -rectSize &&
-                 (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst)) {
-            PoolBalls.erase(iter);
+        if (!(iter->isMarked())) {
+            //this block will check if the ball is colliding with a wall, if not it will check if it is colliding with a pocket
+            //check if there is a collision with any of the walls
+            //right wall
+            if(iter->getXLocation() + iter->getRadius() + iter->getXComponent() > rectSize &&
+               (iter->getYLocation() <= pocketConst && iter->getYLocation() >= -pocketConst)) {
+                iter->setXComponent(iter->getXComponent() * -1);
+            }
+            //else if colliding in top or bottom right pockets
+            else if(iter->getXLocation() + iter->getRadius() + iter->getXComponent() > rectSize &&
+                    (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
+                //PoolBalls.erase(iter);
+                iter->markBall();
+            }
+            
+            //left wall
+            if(iter->getXLocation() - iter->getRadius() + iter->getXComponent() < -rectSize &&
+               (iter->getYLocation() <= pocketConst && iter->getYLocation() >= -pocketConst)) {
+                iter->setXComponent(-1 * iter->getXComponent());
+            }
+            //else if colliding in top or bottom left pockets
+            else if(iter->getXLocation() - iter->getRadius() - iter->getXComponent() < -rectSize &&
+                    (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
+                //PoolBalls.erase(iter);
+                iter->markBall();
+            }
+            
+            //top wall
+            if(iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize &&
+               ((iter-> getXLocation() <= pocketConst && iter->getXLocation() >= .6125) || (iter-> getXLocation() <= -.6125 && iter->getXLocation() >= -pocketConst) )) {
+                iter->setYComponent(-1 * iter->getYComponent());
+            }
+            //else if colliding in top right or left or middle pockets
+            else if (iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize &&
+                     (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst || ( iter->getXLocation() < 0.6125 && iter->getXLocation() > -0.6125) )) {
+                //PoolBalls.erase(iter);
+                iter->markBall();
+            }
+            
+            //bottom wall
+            if(iter->getYLocation() - iter->getRadius() + iter->getYComponent() < -rectSize &&
+               ((iter-> getXLocation() <= pocketConst && iter->getXLocation() >= .6125) || (iter-> getXLocation() <= -.6125 && iter->getXLocation() >= -pocketConst) )) {
+                iter->setYComponent(-1 * iter->getYComponent());
+            }
+            //else if colliding in bottom right or left or middle  pockets
+            else if (iter->getYLocation() - iter->getRadius() - iter->getYComponent() < -rectSize &&
+                     (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst || ( iter->getXLocation() < 0.6125 && iter->getXLocation() > -0.6125) )) {
+                //PoolBalls.erase(iter);
+                iter->markBall();
+            }
         }
     }
     
     //clear the quadtree
     ballsQuadtree.clearTree();
+}
+
+// Function to delete the balls that have been marked after they are sunk into pockets
+void deleteBalls() {
+    float clear = 0.0;
+    for (vector<PoolBall>::iterator iter = PoolBalls.begin(); iter != PoolBalls.end(); iter++) {
+        if (iter->isMarked()) {
+            iter->setZLocation(clear);
+            iter->setXLocation(clear);
+            iter->setYLocation(clear);
+            iter->setXComponent(clear);
+            iter->setYComponent(clear);
+            iter->setZComponent(clear);
+        }
+    }
 }
 
 // This function will return the ball's translation components for a given point in time
@@ -588,13 +839,16 @@ void moveBall(int& t) {
     //time (t) is initially 0 and it is unaffected by drag
     
     checkCollisions();
+    deleteBalls();
     frictionAmount = -frictionCo*t; //amount of friction on the table at the current time
     
     //this part will incorporate friction
     //change each ball's velocity by the amount of friction at that time
     for (vector<PoolBall>::iterator iter = PoolBalls.begin(); iter!=PoolBalls.end(); iter++) {
-        iter->setXComponent(iter->getXComponent() + iter->getXComponent()*frictionAmount);
-        iter->setYComponent(iter->getYComponent() + iter->getYComponent()*frictionAmount);
+        if(!(iter->isMarked())) {
+            iter->setXComponent(iter->getXComponent() + iter->getXComponent()*frictionAmount);
+            iter->setYComponent(iter->getYComponent() + iter->getYComponent()*frictionAmount);
+        }
     }
     
     t+= 1; //increment time
@@ -620,18 +874,22 @@ void calculateVelocity(float x, float y) {
      is not square, a different constant needs to be the divisor.
      
      */
-
+    
     x = (x-(width/2.0)) / widthRatio;
     x *= ratioOfFarPlaneToNear; //ratio of how much X values change between the planes
     y = (y-(height/2.0)) / heightRatio;
     y *= ratioOfFarPlaneToNear; //ratio of how much Y values change between the planes
     
     vector<PoolBall>::iterator iter = PoolBalls.begin();
+    a = ((x - iter->getXLocation()) / 10);
+    b = ((y - iter->getYLocation()) / 10);
+    a = a*cos(shotAngle) - b*sin(shotAngle);
+    b = a*sin(shotAngle) + b*cos(shotAngle);
+    a = -a;
+    b = -b;
     
-    //set the motion of the cue ball
-    iter->setXComponent((iter->getXLocation() - x) / 10);
-    iter->setYComponent((iter->getYLocation() - y) / 10);
-    
+    iter->setXComponent(a); iter->setYComponent(b);
+    shotAngle = 0.0;
 }
 
 // Main routine.
@@ -647,6 +905,7 @@ int main(int argc, char **argv)
     glutReshapeFunc(resize);
     glutKeyboardFunc(keyInput);
     glutMouseFunc(mouseCallback);
+    glutPassiveMotionFunc(passiveMotion);
     glutTimerFunc(50, animate, 1);
     glutMainLoop();
     
