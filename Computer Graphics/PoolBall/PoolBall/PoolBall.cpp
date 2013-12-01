@@ -28,6 +28,11 @@ PoolBall::PoolBall(double xPos, double yPos, double zPos, int bID) {
     
     //ball is not marked
     marked = false;
+    
+    //create the glu quadric object so a striped texture can be mapped to the ball
+    qobj = gluNewQuadric();
+    gluQuadricDrawStyle(qobj, GLU_FILL);
+    gluQuadricNormals(qobj, GLU_SMOOTH);
 }
 
 //Non-parameterized Constructor
@@ -44,6 +49,10 @@ PoolBall::PoolBall() {
     
     //this is the best design decision ever
     ballID = 0;
+    
+    qobj = gluNewQuadric();
+    gluQuadricDrawStyle(qobj, GLU_FILL);
+    gluQuadricNormals(qobj, GLU_SMOOTH);
 }
 
 //GETTERS
@@ -113,16 +122,20 @@ void PoolBall::setAngle(double ang) {
 //Setter for x-component of velocity
 void PoolBall::setXComponent(double xVel) {
     xV = xVel;
+    std::cout << xV << std::endl;
+    if(abs(xV) > maxVelocity) xV = ((abs(xV))/xV) * maxVelocity;
 }
 
 //Setter for y-component of velocity
 void PoolBall::setYComponent(double yVel) {
     yV = yVel;
+    if(abs(yV) > maxVelocity) yV = ((abs(yV))/yV) * maxVelocity;
 }
 
 //Setter for z-component of velocity
 void PoolBall::setZComponent(double zVel) {
     zV = zVel;
+    if(abs(zV) > maxVelocity) zV = ((abs(zV))/zV) * maxVelocity;
 }
 
 //Setter for x-coordinate of position
@@ -155,12 +168,11 @@ void PoolBall::updatePosition() {
     xLoc += xV;
     yLoc += yV;
     zLoc += zV;
-    if(ballID == 6) std::cout << "XL: " << xLoc << " YL: " << yLoc << " ZL: " << zLoc << std::endl;
 }
 
 //Function to mark the ball if it has been sunk into a pocket. It will be deleted
-void PoolBall::markBall() {
-    marked = true;
+void PoolBall::markBall(bool mark) {
+    marked = mark;
 }
 
 //Function to check if two PoolBall objects are the same. Each PoolBall object has an ID attribute that indicates which ball it is
@@ -171,14 +183,12 @@ bool PoolBall::operator!=(PoolBall Ball2) {
 
 //Function to determine if this pool ball is colliding with another pool ball at location (b2x, b2y, b2z)
 bool PoolBall::isColliding(PoolBall Ball2) {
-    
     //to determine if two uniform spheres are in a collision, it is as simple as determining if the distance between their centers is less than or equal to the diameter of a single ball
     
     if(ballID == Ball2.ballID) return false; //ball cannot collide with itself
     
     //distance between the centers of the two pool balls
     double centerDistance = sqrt( pow(xLoc + xV - (Ball2.xLoc + Ball2.xV), 2) + pow(yLoc + yV - (Ball2.yLoc + Ball2.yV), 2) + pow(zLoc - Ball2.zLoc, 2) );
-    
     if (centerDistance <= 2*radius) return true; //ball is colliding
     else return false;                           //ball is not colliding
 }
@@ -188,7 +198,6 @@ void PoolBall::drawBall() {
     glTranslatef(0.0, 0.0, -15.0);
     glTranslatef(xLoc, yLoc, zLoc);
     glRotatef(angle, yV, -xV, 0);
-    glutSolidSphere(radius, 12, 10);
+    gluSphere(qobj, radius, 15, 12);
     glPopMatrix();
-    //std::cout << "Velocity: " << xV << std::endl;
 }

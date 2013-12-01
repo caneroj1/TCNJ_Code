@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		44725A86182D830A00AB138B /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44725A84182D830A00AB138B /* GLUT.framework */; };
 		44725A87182D830A00AB138B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44725A85182D830A00AB138B /* OpenGL.framework */; };
-		44725A8D182D91CD00AB138B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44725A8B182D91CD00AB138B /* main.cpp */; };
 		44725A91182EB03C00AB138B /* File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44725A8F182EB03C00AB138B /* File.cpp */; };
 		447C7242182B162D009AA73F /* PoolBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 447C7241182B162D009AA73F /* PoolBall.cpp */; };
 		447C7244182B162D009AA73F /* PoolBall.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 447C7243182B162D009AA73F /* PoolBall.1 */; };
@@ -32,9 +31,7 @@
 /* Begin PBXFileReference section */
 		44725A84182D830A00AB138B /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		44725A85182D830A00AB138B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		44725A8B182D91CD00AB138B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		44725A8F182EB03C00AB138B /* File.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = File.cpp; path = "/Users/joecanero/Documents/Computer Graphics/PoolBall/PoolBall/File.cpp"; sourceTree = "<absolute>"; };
-		44725A90182EB03C00AB138B /* File.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = File.h; path = ../../../../Desktop/File.h; sourceTree = "<group>"; };
 		447C723E182B162D009AA73F /* PoolBall */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PoolBall; sourceTree = BUILT_PRODUCTS_DIR; };
 		447C7241182B162D009AA73F /* PoolBall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PoolBall.cpp; sourceTree = "<group>"; };
 		447C7243182B162D009AA73F /* PoolBall.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = PoolBall.1; sourceTree = "<group>"; };
@@ -77,9 +74,7 @@
 		447C7240182B162D009AA73F /* PoolBall */ = {
 			isa = PBXGroup;
 			children = (
-				44725A8B182D91CD00AB138B /* main.cpp */,
 				44725A8F182EB03C00AB138B /* File.cpp */,
-				44725A90182EB03C00AB138B /* File.h */,
 				447C7241182B162D009AA73F /* PoolBall.cpp */,
 				447C724A182B1648009AA73F /* PoolBall.h */,
 				447C724B182B48A5009AA73F /* ElasticCollision.cpp */,
@@ -142,7 +137,6 @@
 			files = (
 				447C724D182B48A5009AA73F /* ElasticCollision.cpp in Sources */,
 				44725A91182EB03C00AB138B /* File.cpp in Sources */,
-				44725A8D182D91CD00AB138B /* main.cpp in Sources */,
 				447C7242182B162D009AA73F /* PoolBall.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

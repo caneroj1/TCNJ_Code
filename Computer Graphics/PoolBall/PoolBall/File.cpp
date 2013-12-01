@@ -16,15 +16,14 @@
 // 1) DONE -- Implement collision checking between the balls on the table and the walls of the table
 // 2) DONE -- Be able to get balls into pockets and remove them from play
 // 3) DONE -- Be able to change the angle that the cue stick makes with the cue ball.
-// 4) NOT DONE -- Add texture to the balls, and to the table. Possibly look into making the walls look like wood.
-// 5) NOT DONE -- Add lighting to the simulation.
+// 4) DONE -- Add texture to the balls, and to the table. Possibly look into making the walls look like wood. That didn't happen, but I added a grass
+//            texture to the table to make it look something like felt.
+// 5) DONE -- Add lighting to the simulation.
 //
-// Steps 4 and 5 will be implemented in the final project.
-// As of now, I can't get the cue stick to change its angle accurately when the user changes the angle that
-// the shot will have.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <vector>
 #include "PoolBall.h"
@@ -41,7 +40,8 @@
 using namespace std;
 
 //Function declarations
-void deleteBalls();
+void drawStick();                                           //declaration of function to draw the cue stick
+void deleteBalls();                                         //declaration of function to mark balls so they are moved away when they go in a pocket
 void drawBalls();                                           //declaration of function to draw the balls of the table
 void drawPockets();                                         //declaration of function to draw the pockets
 void drawPoolTable();                                       //declaration of function to draw the pool table
@@ -53,9 +53,12 @@ void calculateVelocity(float, float);                       //declaration of fun
 void checkCollisions();                                     //declaration of function that checks if there is a collision happening at each unit of time
 
 //Globals
-double xC = 0.0;
-double yC = 0.0;
-double cueStartX = 0.0;                                     //x-coordinate of the cue ball's initial location
+GLUquadricObj *stick;                                       //pointer to the cue stick glu quadric object
+static unsigned int texture[3];                             //Array of texture indices
+bool scratch = false;                                       //variable to store the case of a scratch
+double xC = 0.0;                                            //variable that stores the x-coordinate for passive motion tracking
+double yC = 0.0;                                            //variable that stores the y-coordinate for passive motion tracking
+double cueStartX = -7.0;                                    //x-coordinate of the cue ball's initial location
 double cueStartY = 0.0;                                     //y-coordinate of the cue ball's initial location
 double cueStickBeginX = 0.0;                                //x-coordinate of the begining of the pool stick (begins at user's mouse)
 double cueStickBeginY = 0.0;                                //y-coordinate of the beginning of the pool stick (begins at user's mouse)
@@ -171,7 +174,6 @@ int QuadtreeNode::numberBallsIntersected()
                 numVal++;
         }
     }
-    cout << numVal << endl;
     return numVal;
 }
 
@@ -264,6 +266,9 @@ void QuadtreeNode::ballCollisions() {
             ballList2.erase(ballList2.begin());
         }
         
+        //the main vector of pool balls, PoolBalls, was not being updated properly even though this function was updating the pool balls.
+        //what was happening was that the function was only updating the local vectors, so this loop updates the vector PoolBalls with the results
+        
         std::vector<PoolBall>::iterator iter2 = PoolBalls.begin(); int k = 0;
         for (std::vector<PoolBall>::iterator iter1 = ballList.begin(); iter1 != ballList.end(); iter1++) {
             if(iter1->getID() == iter2->getID()) {
@@ -331,6 +336,99 @@ void Quadtree::drawBalls() {
 Quadtree ballsQuadtree; // Global quadtree.
 
 
+
+
+// Struct of bitmap file.
+struct BitMapFile
+{
+    int sizeX;
+    int sizeY;
+    unsigned char *data;
+};
+
+// Routine to read a bitmap file.
+// Works only for uncompressed bmp files of 24-bit color.
+BitMapFile *getBMPData(string filename)
+{
+    BitMapFile *bmp = new BitMapFile;
+    unsigned int size, offset, headerSize;
+    
+    // Read input file name.
+    ifstream infile(filename.c_str(), ios::binary);
+
+    // Get the starting point of the image data.
+    infile.seekg(10);
+    infile.read((char *) &offset, 4);
+    
+    // Get the header size of the bitmap.
+    infile.read((char *) &headerSize,4);
+    
+    // Get width and height values in the bitmap header.
+    infile.seekg(18);
+    infile.read( (char *) &bmp->sizeX, 4);
+    infile.read( (char *) &bmp->sizeY, 4);
+    
+    // Allocate buffer for the image.
+    size = bmp->sizeX * bmp->sizeY * 24;
+    
+    bmp->data = new unsigned char[size];
+    // Read bitmap data.
+    infile.seekg(offset);
+    infile.read((char *) bmp->data , size);
+    
+    // Reverse color from bgr to rgb.
+    int temp;
+    for (int i = 0; i < sizeof(bmp->data); i += 3)
+    {
+        temp = bmp->data[i];
+        bmp->data[i] = bmp->data[i+2];
+        bmp->data[i+2] = temp;
+    }
+    
+    return bmp;
+}
+
+// Load external textures.
+void loadExternalTextures()
+{
+    // Local storage for bmp image data.
+    BitMapFile *image[3];
+    
+    // Load the texture.
+    image[0] = getBMPData("/Users/joecanero/Documents/Computer Graphics/Book Code/Textures/nightSky.bmp");
+    image[1] = getBMPData("/Users/joecanero/Documents/Computer Graphics/Book Code/Textures/grass.bmp");
+    image[2] = getBMPData("/Users/joecanero/Documents/Computer Graphics/Book Code/Textures/sky.bmp");
+    
+    //image[0] = getBMPData("/Users/joecanero/Desktop/Untitled.bmp");
+    // Bind striped image to texture index[0].
+    glBindTexture(GL_TEXTURE_2D, texture[0]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image[0]->sizeX, image[0]->sizeY, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, image[0]->data);
+    
+    // Bind grass image to texture index[1]. This is going to be the felt
+    glBindTexture(GL_TEXTURE_2D, texture[1]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image[1]->sizeX, image[1]->sizeY, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, image[1]->data);
+    
+    // Bind cue stick texture to texture index[2]. This will make the cue stick look like a cue stick
+    glBindTexture(GL_TEXTURE_2D, texture[2]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image[2]->sizeX, image[2]->sizeY, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, image[2]->data);
+}
+
+
 // Drawing routine.
 void drawScene(void)
 {
@@ -342,56 +440,227 @@ void drawScene(void)
     drawPockets();
     drawBalls();
     
-    if(!animating) { //only draw the cue when we are able to take a shot
-        glColor3f(139.0/256.0, 69.0/256.0, 19.0/256.0);
-        glLineWidth(2.0);
-        glBegin(GL_LINES);
-        glVertex3f(cueStickBeginX, cueStickBeginY, pushIntoFrustumAmount+1);
-        glVertex3f(cueStickEndX, cueStickEndY, pushIntoFrustumAmount+1);
-        glEnd();
-    }
+    //only draw the cue stick when we are ready to take a shot
+    if(!animating && !scratch) drawStick();
     
     glutSwapBuffers();
+}
+
+//This function will draw the cue stick by taking the dot product of the angle that the user's mouse is making with the ball
+//and rotating a tapered cylinder by the proper amount
+void drawStick(void) {
+    
+    //material lighting properties for the cue stick
+    float matAmbAndDif[4] = { 0.8, 0.6, 0.0, 1.0 };
+    float matSpec[4] { 1.0, 1.0, 1.0, 1.0 };
+    float matShine[1] = { 20.0 };
+    
+    //initialization of variables for calculating the cue stick's position
+    double result = 0;
+    double x1 = 0;
+    double y1 = 1;
+    double z1 = 0;
+    double x2 = cueStickEndX - cueStickBeginX; //x2 is the x component of the vector between the cue stick's end and beginning points
+    double y2 = cueStickEndY - cueStickBeginY; //y2 is the y component of the vector between the cue stick's end and beginning points
+    double dot = x1*x2 + y1 *y2;               //take the dot product of a vertical vector and the cue stick's vector to get the angle between them
+    dot /= cueStickLength;                     //divide by the magnitude of the cue stick, the magnitude of the vertical is 1, so not needed here
+    double theta = acos(dot);                  //to get the angle between the two vectors, take the arccos of the dot product
+    if(x2 > 0) theta *= -1*180.0 / PI;         //convert the angle into degrees, and if x2 > 0, which means the cue stick is pointing to the right of
+                                               //the screen, multiply by a negative to get the proper rotation, else
+    else theta *= 180.0 / PI;                  //just convert to degrees
+    
+    
+    //set lighting properties for the cue stick
+    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+    
+    //isolate its transformation matrix, and push the cue stick into the frustum and set its beginning point to point = (cueStickBeginX, cueStickBeginY)
+    glPushMatrix();
+    glTranslatef(cueStickBeginX, cueStickBeginY, pushIntoFrustumAmount+1);
+    glRotatef(theta + (-shotAngle), 0.0, 0.0, 1.0); //rotate the cue stick by the amount calculated above, take into account the user changing the angle
+    glRotatef(-90.0, 1.0, 0.0, 0.0);                //make the cue stick point vertically up first, before rotating it according to the calculation
+    glBindTexture(GL_TEXTURE_2D, texture[2]);       //map the third texture to the cue stick
+    glEnable(GL_TEXTURE_GEN_S);                     //enable mapping on a gluCylinder object
+    glEnable(GL_TEXTURE_GEN_T);
+    gluCylinder(stick, 0.25, 0.10, cueStickLength, 12, 15);
+    glDisable(GL_TEXTURE_GEN_S);
+    glDisable(GL_TEXTURE_GEN_T);
+    glPopMatrix();                                  //disable mapping and pop the transformation matrix
+    
 }
 
 //this function will draw the balls
 void drawBalls(void) {
     
     // Colors of the balls of the pool table. The balls are all red for now.
-    
     /*****************************************/
     
-    float matAmbAndDif[] = { 0.8, 0.8, 0.8, 1.0 };
+    //the material ambience and diffuse will be specified differently for each ball depending upon a switch statement
+    //the specularity and shininess is the same for each ball
+    
+    float matAmbAndDif[4];
     float matSpec[] = { 1.0, 1.0, 1.0, 1.0 };
-    float matShine[] = { 30.0 };
-    
-    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
-    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+    float matShine[] = { 50.0 };
     
     /*****************************************/
-    
+
     //draw all of the balls
-    glColor3f(1.0, 1.0, 1.0); //white
     glLineWidth(1.0);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     for (vector<PoolBall>::iterator iter1 = PoolBalls.begin(); iter1 != PoolBalls.end(); iter1++) {
         if(!(iter1->isMarked())) {
-            iter1->updatePosition();
-            iter1->drawBall();
+            switch (iter1->getID()) { //specify different lighting properties for each ball
+                case 1:
+                    matAmbAndDif[0] = 1.0;
+                    matAmbAndDif[1] = 1.0;
+                    matAmbAndDif[2] = 1.0;
+                    matAmbAndDif[3] = 1.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                    
+                case 2:
+                    matAmbAndDif[0] = 1.0;
+                    matAmbAndDif[1] = 1.0;
+                    matAmbAndDif[2] = 0.0;
+                    matAmbAndDif[3] = 1.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 3:
+                    matAmbAndDif[0] = 1.0;
+                    matAmbAndDif[1] = 0.5;
+                    matAmbAndDif[2] = 0.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 4:
+                    matAmbAndDif[0] = 0.7;
+                    matAmbAndDif[1] = 0.0;
+                    matAmbAndDif[2] = 0.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 5:
+                    matAmbAndDif[0] = 0.0;
+                    matAmbAndDif[1] = 0.0;
+                    matAmbAndDif[2] = 0.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 6:
+                    matAmbAndDif[0] = 1.0;
+                    matAmbAndDif[1] = 0.0;
+                    matAmbAndDif[2] = 0.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 7:
+                    matAmbAndDif[0] = 0.1;
+                    matAmbAndDif[1] = 0.3;
+                    matAmbAndDif[2] = 0.8;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 8:
+                    matAmbAndDif[0] = 0.0;
+                    matAmbAndDif[1] = 1.0;
+                    matAmbAndDif[2] = 0.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 9:
+                    matAmbAndDif[0] = 0.5;
+                    matAmbAndDif[1] = 0.0;
+                    matAmbAndDif[2] = 1.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 10:
+                    matAmbAndDif[0] = 0.5;
+                    matAmbAndDif[1] = 0.5;
+                    matAmbAndDif[2] = 1.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    break;
+                case 11: //this ball is the striped ball, in addition to its lighting properties, we must specify it to have a striped texture
+                    matAmbAndDif[0] = 1.0;
+                    matAmbAndDif[1] = 1.0;
+                    matAmbAndDif[2] = 1.0;
+                    matAmbAndDif[3] = 0.0;
+                    
+                    glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDif);
+                    glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+                    glMaterialfv(GL_FRONT, GL_SHININESS, matShine);
+                    
+                    //bind the first texture, the yellow stripe to this ball
+                    glBindTexture(GL_TEXTURE_2D, texture[0]);
+                    glEnable(GL_TEXTURE_GEN_S);
+                    glEnable(GL_TEXTURE_GEN_T);
+                    break;
+                    
+                    
+            }
+            iter1->updatePosition();    //update each ball's position
+            iter1->drawBall();          //draw each ball
+            glDisable(GL_TEXTURE_GEN_S);
+            glDisable(GL_TEXTURE_GEN_T);
         }
     }
-    glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);            //disable face culling
 }
 
 //this function will draw the pockets
 void drawPockets(void) {
-    
+    int pocketRad = 1;
+    int pocketSlices = 12;
+    int pocketStacks = 12;
     // Manage the colors of the pockets of the pool table. The pockets are black with no shininess.
-    
     /*****************************************/
+    
+    //pockets are black, so they have very little lighting properties
     
     float matAmbAndDifPocket[] = { 0.0, 0.0, 0.0, 1.0 };
     float matSpecPocket[] = { 0.0, 0.0, 0.0, 0.0 };
@@ -407,49 +676,49 @@ void drawPockets(void) {
     //top right pocket
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
-    glTranslatef(13.00, 13.0, 0.0);
+    glTranslatef(rectSize, rectSize, 0.0);
     glColor3f(0.0, 0.0, 0.0);
-    glutSolidSphere(1.0, 12.0, 12.0);
+    glutSolidSphere(pocketRad, pocketSlices, pocketStacks);
     glPopMatrix();
     
     //top left pocket
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
-    glTranslatef(-13.00, 13.0, 0.0);
+    glTranslatef(-rectSize, rectSize, 0.0);
     glColor3f(0.0, 0.0, 0.0);
-    glutSolidSphere(1.0, 12.0, 12.0);
+    glutSolidSphere(pocketRad, pocketSlices, pocketStacks);
     glPopMatrix();
     
     //bottom right pocket
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
-    glTranslatef(13.00, -13.0, 0.0);
+    glTranslatef(rectSize, -rectSize, 0.0);
     glColor3f(0.0, 0.0, 0.0);
-    glutSolidSphere(1.0, 12.0, 12.0);
+    glutSolidSphere(pocketRad, pocketSlices, pocketStacks);
     glPopMatrix();
     
     //bottom left pocket
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
-    glTranslatef(-13.00, -13.0, 0.0);
+    glTranslatef(-rectSize, -rectSize, 0.0);
     glColor3f(0.0, 0.0, 0.0);
-    glutSolidSphere(1.0, 12.0, 12.0);
+    glutSolidSphere(pocketRad, pocketSlices, pocketStacks);
     glPopMatrix();
     
     //top middle pocket
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
-    glTranslatef(0.0, 13.0, 0.0);
+    glTranslatef(0.0, rectSize, 0.0);
     glColor3f(0.0, 0.0, 0.0);
-    glutSolidSphere(1.0, 12.0, 12.0);
+    glutSolidSphere(pocketRad, pocketSlices, pocketStacks);
     glPopMatrix();
     
     //bottom middle pocket
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount);
-    glTranslatef(0.0, -13.0, 0.0);
+    glTranslatef(0.0, -rectSize, 0.0);
     glColor3f(0.0, 0.0, 0.0);
-    glutSolidSphere(1.0, 12.0, 12.0);
+    glutSolidSphere(pocketRad, pocketSlices, pocketStacks);
     glPopMatrix();
     
 }
@@ -457,12 +726,11 @@ void drawPockets(void) {
 void drawPoolTable(void) {
     
     // Manage the color of the pool table itself. The table is a green with no shininess.
-    
     /*****************************************/
     
     float matAmbAndDifTable[] = { 0.2, 1.0, 0.2, 1.0 };
-    float matSpecTable[] = { 0.0, 0.0, 0.0, 1.0 };
-    float matShineTable[] = { 0.0 };
+    float matSpecTable[] = { 1.0, 1.0, 0.0, 1.0 };
+    float matShineTable[] = { 30.0 };
     
     glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbAndDifTable);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, matAmbAndDifTable);
@@ -475,14 +743,23 @@ void drawPoolTable(void) {
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount); //translate everything into the frustum
     
     glColor3f(0.20, 0.60, 0.0); //color of the pool table
-    glRectf(-rectSize, -rectSize, rectSize, rectSize); //the pool table
+    
+    // the felt texture of a pool table is achieved by mapping grass to the pool table
+    // Map the grass texture onto the pool table
+    glBindTexture(GL_TEXTURE_2D, texture[1]);
+    glBegin(GL_POLYGON);
+    glNormal3f(0.0, 1.0, 0.0);
+    glTexCoord2f(0.0, 0.0); glVertex3f(-rectSize, -rectSize, 0);
+    glTexCoord2f(1.0, 0.0); glVertex3f(rectSize, -rectSize, 0);
+    glTexCoord2f(1.0, 1.0); glVertex3f(rectSize, rectSize, 0);
+    glTexCoord2f(0.0, 1.0); glVertex3f(-rectSize, rectSize, 0);
+    glEnd();
     
     glPopMatrix();
     
     glColor3f(0.80, 0.60, 0.0); //color of the walls of the table
     
     // Manage the color of the walls of the pool table. The walls are a brown with no shininess.
-    
     /*****************************************/
     
     float matAmbAndDifWalls[] = { 0.8, 0.6, 0.0, 1.0 };
@@ -496,71 +773,87 @@ void drawPoolTable(void) {
     
     /*****************************************/
 
+    float wallY = 13.25; //variables for use in making the walls
+    float wallX = 0.3;
+    float translationF = 13.25; //translation factor
+    
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount); //translate everything into the frustum
     
-    glTranslatef(-13.25, 0.0, 0.0); //translate the left wall to the left
+    glTranslatef(-translationF, 0.0, 0.0); //translate the left wall to the left
     glRotatef(90.0, 0.0, 1.0, 0.0); //rotation of the left side of the pool table wall
-    glRectf(-0.3, -13.25, 0.3, 13.25);
+    glRectf(-wallX, -wallY, wallX, wallY);
     
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount); //translate everything into the frustum
     
-    glTranslatef(13.25, 0.0, 0.0); //translate the right wall to the right
+    glTranslatef(translationF, 0.0, 0.0); //translate the right wall to the right
     glRotatef(-90.0, 0.0, 1.0, 0.0); //rotation of the right side of the pool table wall
-    glRectf(-0.3, -13.25, 0.3, 13.25);
+    glRectf(-wallX, -wallY, wallX, wallY);
     
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount); //translate everything into the frustum
     
-    glTranslatef(0.0, 13.25, 0.0); //translate the top wall to the top
+    glTranslatef(0.0, translationF, 0.0); //translate the top wall to the top
     glRotatef(-90.0, 1.0, 0.0, 0.0); //rotation of the top side of the pool table wall
-    glRectf(-13.25, -0.3, 13.25, 0.3);
+    glRectf(-wallY, -wallX, wallY, wallX);
     
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0.0, 0.0, pushIntoFrustumAmount); //translate everything into the frustum
     
-    glTranslatef(0.0, -13.25, 0.0); //translate the bottom wall to the bottom
+    glTranslatef(0.0, -translationF, 0.0); //translate the bottom wall to the bottom
     glRotatef(90.0, 1.0, 0.0, 0.0); //rotation of the bottom side of the pool table wall
-    glRectf(-13.25, -0.3, 13.25, 0.3);
+    glRectf(-wallY, -wallX, wallY, wallX);
     
     glPopMatrix();
+    
+    //additional parameters for constructing the walls of the pool table
+    //these extra walls make the pockets flush with the sides of the pool table
+    float boundX = 0.5;
+    float boundY = 16.15;
+    float boundX2 = 0.72;
+    float boundY2 = 15.70;
     
     //draw additional boundaries on the outside of the pool table so the pockets look better
     //right boundary
     glPushMatrix();
     glTranslatef(15.50, 0.0, pushIntoFrustumAmount - 2); //translate into the frustum
-    glRectf(-0.5, -16.15, 0.5, 16.15);
+    glRectf(-boundX, -boundY, boundX, boundY);
     glPopMatrix();
     
     //left boundary
     glPushMatrix();
     glTranslatef(-15.50, 0.0, pushIntoFrustumAmount - 2); //translate into the frustum
-    glRectf(-0.5, -16.15, 0.5, 16.15);
+    glRectf(-boundX, -boundY, boundX, boundY);
     glPopMatrix();
     
     //top boundary
     glPushMatrix();
     glTranslatef(0.0, 15.5, pushIntoFrustumAmount - 2); //translate into the frustum
     glRotatef(90.0, 0.0, 0.0, 1.0);
-    glRectf(-0.72, -15.70, 0.72, 15.70);
+    glRectf(-boundX2, -boundY2, boundX2, boundY2);
     glPopMatrix();
     
     //bottom boundary
     glPushMatrix();
     glTranslatef(0.0, -15.5, pushIntoFrustumAmount - 2); //translate into the frustum
     glRotatef(90.0, 0.0, 0.0, 1.0);
-    glRectf(-0.72, -15.70, 0.72, 15.70);
+    glRectf(-boundX2, -boundY2, boundX2, boundY2);
     glPopMatrix();
 }
 
 // Initialization routine.
 void setup(void)
 {
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    
     /*****************************************/
+    
+    //specify the properties of Light 0
+    //Light 0 is a positional white light located at the origin
     
     glEnable(GL_LIGHTING);
     
@@ -581,38 +874,44 @@ void setup(void)
     /*****************************************/
     
     //put all of the balls to be used into the PoolBalls vector
+    //the balls are put in a 9-ball arrangement
+    
     PoolBalls.push_back(PoolBall(cueStartX, cueStartY, 0.0, 1));
-    /*PoolBalls.push_back(PoolBall(10.0, 0.0, 0.0, 2));
-    PoolBalls.push_back(PoolBall(12.0, 0.0, 0.0, 3));
-    PoolBalls.push_back(PoolBall(8.0, 0.0, 0.0, 4));
+    PoolBalls.push_back(PoolBall(4.0, 0.0, 0.0, 2));
+    PoolBalls.push_back(PoolBall(6.0, 1.0, 0.0, 3));
+    PoolBalls.push_back(PoolBall(6.0, -1.0, 0.0, 4));
     PoolBalls.push_back(PoolBall(8.0, 2.0, 0.0, 5));
-    PoolBalls.push_back(PoolBall(6.0, 0.0, 0.0, 6));
-    PoolBalls.push_back(PoolBall(8.0, -2.0, 0.0, 7));
-    PoolBalls.push_back(PoolBall(10.0, 2.0, 0.0, 8));
-    PoolBalls.push_back(PoolBall(10.0, -2.0, 0.0, 9));
-    PoolBalls.push_back(PoolBall(10.0, -4.0, 0.0, 10));
-    PoolBalls.push_back(PoolBall(10.0, 4.0, 0.0, 11));
-    PoolBalls.push_back(PoolBall(12.0, 2.0, 0.0, 12));
-    PoolBalls.push_back(PoolBall(12.0, -2.0, 0.0, 13));
-    PoolBalls.push_back(PoolBall(12.0, 4.0, 0.0, 14));
-    PoolBalls.push_back(PoolBall(12.0, -4.0, 0.0, 15));
-    PoolBalls.push_back(PoolBall(12.0, 6.0, 0.0, 16));
-    PoolBalls.push_back(PoolBall(12.0, -6.0, 0.0, 17));
-    */
-    PoolBalls.push_back(PoolBall(6.0, 0.0, 0.0, 2));
-    PoolBalls.push_back(PoolBall(8.0, 1.0, 0.0, 3));
-    PoolBalls.push_back(PoolBall(8.0, -1.0, 0.0, 4));
-    PoolBalls.push_back(PoolBall(10.0, 2.0, 0.0, 5));
-    PoolBalls.push_back(PoolBall(10.0, 0.0, 0.0, 6));
-    PoolBalls.push_back(PoolBall(10.0, -2.0, 0.0, 7));
-    PoolBalls.push_back(PoolBall(12.0, 3.0, 0.0, 8));
-    PoolBalls.push_back(PoolBall(12.0, 1.0, 0.0, 9));
-    PoolBalls.push_back(PoolBall(12.0, -1.0, 0.0, 10));
-    PoolBalls.push_back(PoolBall(12.0, -3.0, 0.0, 11));
+    PoolBalls.push_back(PoolBall(8.0, -2.0, 0.0, 6));
+    PoolBalls.push_back(PoolBall(10.0, 1.0, 0.0, 7));
+    PoolBalls.push_back(PoolBall(10.0, -1.0, 0.0, 8));
+    PoolBalls.push_back(PoolBall(12.0, 0.0, 0.0, 9));
+    PoolBalls.push_back(PoolBall(8.0, 0.0, 0.0, 11));
+    
+    //initialize the cue stick glu object
+    stick = gluNewQuadric();
+    gluQuadricDrawStyle(stick, GLU_FILL);
+    gluQuadricNormals(stick, GLU_SMOOTH);
+    
+    glEnable(GL_DEPTH_TEST); // Enable depth testing.
+    
+    // Create texture index array and load external textures.
+    glGenTextures(3, texture);
+    loadExternalTextures();
+    
+    //enable texturing
+    glEnable(GL_TEXTURE_2D);
+    
+    // Specify how texture values combine with current surface color values.
+    // Since there is a light source, we use Gl_Modulate to get the proper combination of texture and lighting
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    
+    // Specify automatic texture generation for a sphere map.
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+    
     //initialize the quadtree for the first time
     ballsQuadtree.initialize(-rectSize, -rectSize, 2*rectSize);
     cout << "Interaction: Click anywhere on the table to \"hit\" the cue ball in the direction of the vector pointing from the mouse to the center of the ball. While the ball is moving, clicking again will stop the animation. You are able to change the angle that the cue stick makes with the cue ball, but it is not reflected visually. Press \"A\" to angle the cue to the left, or press \"S\" to angle the cue to the right. If you get a ball in the pocket, it is removed from play. Scratches are not implemented yet." << endl;
-    glClearColor(1.0, 1.0, 1.0, 0.0);
 }
 
 // OpenGL window reshape routine.
@@ -652,22 +951,34 @@ void keyInput(unsigned char key, int x, int y)
 
 //Passive Motion Function
 void passiveMotion(int x, int y) {
-    if (!animating) {
-        vector<PoolBall>::iterator iter = PoolBalls.begin();
+    
+    vector<PoolBall>::iterator iter = PoolBalls.begin();
+    
+    yC = (height - y);
+    yC = (yC - (height/2.0)) / heightRatio;
+    yC *= ratioOfFarPlaneToNear; //ratio of how much Y values change between the planes
+    xC = (x - (width/2.0)) / widthRatio;
+    xC *= ratioOfFarPlaneToNear; //ratio of how much X values change between the planes
+    
+    if (!animating && !scratch) {
        
-        yC = (height - y);
-        yC = (yC - (height/2.0)) / heightRatio;
-        yC *= ratioOfFarPlaneToNear; //ratio of how much Y values change between the planes
-        xC = (x - (width/2.0)) / widthRatio;
-        xC *= ratioOfFarPlaneToNear; //ratio of how much X values change between the planes
-       
+        // the end of the cue stick will be placed at the user's cursor
         cueStickBeginX = xC;
         cueStickBeginY = yC;
+        
+        // the end of the cue stick is placed at the center of the cue ball
         cueStickEndX = iter->getXLocation();
         cueStickEndX = cueStickEndX*cos(cueAngle) - cueStickEndY*sin(cueAngle);
         cueStickEndY = iter->getYLocation();
         cueStickEndY = cueStickEndY*sin(cueAngle) + cueStickEndY*cos(cueAngle);
+        
+        // get the length of the cue stick from the magnitude of the vector connecting the end of the stick to the beginning
         cueStickLength = sqrt( pow(cueStickEndX - cueStickBeginX, 2) + pow(cueStickEndY - cueStickBeginY,2) );
+        glutPostRedisplay();
+    }
+    else if (!animating && scratch) { //passive motion tracking of the cue ball when the user scratches. this will follow the cursor and show where the
+        iter->setXLocation(xC);       //ball can be placed
+        iter->setYLocation(yC);
         glutPostRedisplay();
     }
 }
@@ -695,6 +1006,14 @@ void mouseCallback(int button, int state, int x, int y) {
     if(button == GLUT_LEFT_BUTTON && state == GLUT_UP && animating) {
         calculateVelocity((float)x, (float)(height - y)); // pass the coordinates of the mouse to the function so it can calculate the velocity of the cue ball
         animate(0); //animate with a value of 0, indicating it is to animate after user strikes the ball
+    }
+    
+    //whenever the user clicks again after scratching, the cue ball will be placed at that location
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP && scratch) {
+        vector<PoolBall>::iterator iter = PoolBalls.begin();
+        iter->setXLocation(xC);
+        iter->setYLocation(yC);
+        scratch = false;
     }
     
 }
@@ -771,7 +1090,7 @@ void checkCollisions() {
             else if(iter->getXLocation() + iter->getRadius() + iter->getXComponent() > rectSize &&
                     (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
                 //PoolBalls.erase(iter);
-                iter->markBall();
+                iter->markBall(true);
             }
             
             //left wall
@@ -783,7 +1102,7 @@ void checkCollisions() {
             else if(iter->getXLocation() - iter->getRadius() - iter->getXComponent() < -rectSize &&
                     (iter->getYLocation() > pocketConst || iter->getYLocation() < -pocketConst)) {
                 //PoolBalls.erase(iter);
-                iter->markBall();
+                iter->markBall(true);
             }
             
             //top wall
@@ -795,7 +1114,7 @@ void checkCollisions() {
             else if (iter->getYLocation() + iter->getRadius() + iter->getYComponent() > rectSize &&
                      (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst || ( iter->getXLocation() < 0.6125 && iter->getXLocation() > -0.6125) )) {
                 //PoolBalls.erase(iter);
-                iter->markBall();
+                iter->markBall(true);
             }
             
             //bottom wall
@@ -807,7 +1126,7 @@ void checkCollisions() {
             else if (iter->getYLocation() - iter->getRadius() - iter->getYComponent() < -rectSize &&
                      (iter-> getXLocation() > pocketConst || iter->getXLocation() < -pocketConst || ( iter->getXLocation() < 0.6125 && iter->getXLocation() > -0.6125) )) {
                 //PoolBalls.erase(iter);
-                iter->markBall();
+                iter->markBall(true);
             }
         }
     }
@@ -818,15 +1137,27 @@ void checkCollisions() {
 
 // Function to delete the balls that have been marked after they are sunk into pockets
 void deleteBalls() {
-    float clear = 0.0;
+    float clear = 0.0; float zClear = 50.0;
+    
+    //each ball is moved off of the pool table to location (0, 0, 50) so as not to interfere with any collision testing
+    //deleting the balls was causing memory access issues so this was a quick solution to that problem
     for (vector<PoolBall>::iterator iter = PoolBalls.begin(); iter != PoolBalls.end(); iter++) {
-        if (iter->isMarked()) {
-            iter->setZLocation(clear);
+        if (iter->isMarked() && iter->getID() != 1) {
+            iter->setZLocation(zClear);
             iter->setXLocation(clear);
             iter->setYLocation(clear);
             iter->setXComponent(clear);
             iter->setYComponent(clear);
             iter->setZComponent(clear);
+        }
+        else if(iter->isMarked() && iter->getID() == 1) { //if the ball that is marked is the cue ball, put it back in the middle and allow it to be moved
+            iter->setXLocation(clear);                    //so the user can place it after a scratch
+            iter->setYLocation(clear);
+            iter->setXComponent(clear);
+            iter->setYComponent(clear);
+            iter->setZComponent(clear);
+            iter->markBall(false);
+            scratch = true;                               //since the cue ball went into a pocket, the user scratched, allow the cue ball to be placed
         }
     }
 }
@@ -880,6 +1211,9 @@ void calculateVelocity(float x, float y) {
     y = (y-(height/2.0)) / heightRatio;
     y *= ratioOfFarPlaneToNear; //ratio of how much Y values change between the planes
     
+    
+    //change the hit vector of the cue ball if the user decides to change the angle of the shot themselves
+    //a simple rotation matrix is used to rotate the original hit vector in accordance with the new angle
     vector<PoolBall>::iterator iter = PoolBalls.begin();
     a = ((x - iter->getXLocation()) / 10);
     b = ((y - iter->getYLocation()) / 10);

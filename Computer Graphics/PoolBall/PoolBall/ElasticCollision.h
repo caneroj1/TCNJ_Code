@@ -18,11 +18,4 @@ void ComputeElasticCollision(PoolBall &Ball1, PoolBall &Ball2);
 //function to compute the scalar component of a projection
 double calcProjection(double, double, double, double);
 
-//function to compute the movement angle (theta) of a ball for use in the collision equations
-double calculateTheta(PoolBall Ball);
-
-//function to compute the collision angle (phi) of the balls for use in the collision equations
-double calculatePhi(PoolBall Ball1, PoolBall Ball2);
-
-
 #endif /* defined(__PoolBall__ElasticCollision__) */

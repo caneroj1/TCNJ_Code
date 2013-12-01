@@ -7,31 +7,6 @@
 
 #include "ElasticCollision.h"
 
-// THESE ARENT BEING USED RIGHT NOW
-
-/*
-//function compute the movement of a particular ball
-//the movement angle is computed as asin( (abs(y-component))/(magnitude of velocity) )
-double calculateTheta(PoolBall Ball) {
-    double x = Ball.getXComponent();
-    double y = Ball.getYComponent();
-    double z = Ball.getZComponent();
-    double magnitude = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
-    if (magnitude == 0.0) return 0;
-    else return asin((std::abs(y))/(magnitude));
-    
-}
-
-//function to compute the collision angle between two balls
-//the collision angle is computed as atan( (y2Loc - y1Loc)/(x2Loc - x1Loc) )
-double calculatePhi(PoolBall Ball1, PoolBall Ball2) {
-    double dy = (Ball2.getYLocation() - Ball1.getYLocation());
-    double dx = (Ball2.getXLocation() - Ball2.getXLocation());
-    if (dx == 0.0) return 1.570796326;
-    else return atan( dy/dx );
-}
-*/
-
 // Calculates the scalar value of a vector project. x1 and y1 are components of the vector to be projected onto
 // the vector <x2, y2>
 double calcProjection(double x1, double y1, double x2, double y2) {
@@ -70,31 +45,18 @@ void ComputeElasticCollision(PoolBall &Ball1, PoolBall &Ball2) {
             double b2PerpX = x2 - b2ProjX;
             double b2PerpY = y2 - b2ProjY;
             
-            // Recombine the vectors
-            std::cout << "1 X: " << x1 << " 1 Y: " << y1 << std::endl;
-            std::cout << "2 X: " << x2 << " 2 Y: " << y2 << std::endl;
-            std::cout << "1 Projection X: " << b1ProjX << " 1 Projection Y: " << b1ProjY << std::endl;
-            std::cout << "2 Projection X: " << b2ProjX << " 2 Projection Y: " << b2ProjY << std::endl;
+            // Recombine the vectors for each ball and give them a little push in that direction
+            Ball1.setXComponent(b2ProjX  + b1PerpX);
+            Ball1.setYComponent(b2ProjY + b2PerpY);
+            Ball1.setXLocation(Ball1.getXLocation() + Ball1.getXComponent());
+            Ball1.setYLocation(Ball1.getYLocation() + Ball1.getYComponent());
             
-            std::cout << "1 Perp X: " << b1PerpX << " 1 Perp Y: " << b1PerpY << std::endl;
-            std::cout << "2 Perp X: " << b2PerpX << " 2 Perp Y: " << b2PerpY << std::endl;
-            
-            Ball1.setXComponent(b2PerpX * nX + b1ProjX * nY);
-            Ball1.setYComponent(b2PerpY * nY + b1ProjY * -nX);
-            
-            Ball2.setXComponent(b1ProjX * nX + b2PerpX * nY);
-            Ball2.setYComponent(b1ProjY * nY + b2PerpY * -nX);
+            Ball2.setXComponent(b1ProjX + b2PerpX );
+            Ball2.setYComponent(b1ProjY + b2PerpY );
+            Ball2.setXLocation(Ball2.getXLocation() + Ball2.getXComponent());
+            Ball2.setYLocation(Ball2.getYLocation() + Ball2.getYComponent());
         }
-        else if ((sqrt(pow(Ball1.getXComponent(),2) + pow(Ball1.getYComponent(), 2)) - testFloat > 0)) {
-            /*
-            double tempX = .5 * Ball1.getXComponent();
-            double tempY = .5 * Ball1.getYComponent();
-            Ball1.setXComponent(.5 * tempX + Ball2.getXComponent());
-            Ball1.setYComponent(.5 * tempY + Ball2.getYComponent());
-            Ball2.setXComponent(tempX);
-            Ball2.setYComponent(tempY);
-             */
-            
+        else if ((sqrt(pow(Ball1.getXComponent(),2) + pow(Ball1.getYComponent(), 2)) - testFloat > 0)) { //if ball 1 is moving, ball 2 not
             // Variables that store the velocities of each ball
             double x1 = Ball1.getXComponent();
             double y1 = Ball1.getYComponent();
@@ -112,6 +74,7 @@ void ComputeElasticCollision(PoolBall &Ball1, PoolBall &Ball2) {
             double b1PerpX = x1 - b1ProjX; //calculate the perpendicular vector to the projection
             double b1PerpY = y1 - b1ProjY;
             
+            //set new velocities for each ball
             Ball1.setXComponent(b1PerpX);
             Ball1.setYComponent(b1PerpY);
             
@@ -119,7 +82,7 @@ void ComputeElasticCollision(PoolBall &Ball1, PoolBall &Ball2) {
             Ball2.setYComponent(b1ProjY);
             
         }
-        else if ((sqrt(pow(Ball2.getXComponent(),2) + pow(Ball2.getYComponent(), 2)) - testFloat > 0)) {
+        else if ((sqrt(pow(Ball2.getXComponent(),2) + pow(Ball2.getYComponent(), 2)) - testFloat > 0)) { //if ball 2 moving, ball 1 not
             // Variables that store the velocities of each ball
             double x2 = Ball2.getXComponent();
             double y2 = Ball2.getYComponent();
@@ -136,6 +99,7 @@ void ComputeElasticCollision(PoolBall &Ball1, PoolBall &Ball2) {
             double b2PerpX = x2 - b2ProjX;
             double b2PerpY = y2 - b2ProjY;
             
+            //set new velocities for each ball
             Ball1.setXComponent(b2ProjX);
             Ball1.setYComponent(b2ProjY);
             

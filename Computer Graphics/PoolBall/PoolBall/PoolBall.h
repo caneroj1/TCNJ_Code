@@ -27,11 +27,13 @@
 #define PoolBall_Header_h
 #ifdef __APPLE__
 #  include <GLUT/glut.h>
+#  include <OpenGL/glext.h>
 #else
 #  include <GL/glut.h>
 #endif
 #include <cmath>
 #include <iostream>
+
 class PoolBall  {
 
 //private data for each pool ball object
@@ -42,7 +44,9 @@ private:
     float radius;                               //radius of a ball
     float mass;                                 //mass of a ball
     int ballID;                                 //numerical integer ID of the ball
-    bool marked;                                //bool indicating this ball is marked for deleteion
+    bool marked;                                //bool indicating this ball is marked for deletion
+    GLUquadricObj *qobj;                        //Create a pointer to a quadric object.
+    float maxVelocity = 1.0;                    //maximum size a specific component of a ball's velocity can be
     
 public:
     PoolBall();                                                     //default constructor
@@ -69,13 +73,13 @@ public:
     void setXComponent(double xVel);  //functions to set the components of this ball's velocity, and angle
     void setYComponent(double yVel);
     void setZComponent(double zVel);
-    void setAngle(double ang);
-    void setXLocation(double xL);  //functions to set the coordinates of this ball's location
+    void setAngle(double ang);        //function to set the angle of the ball's rotation
+    void setXLocation(double xL);     //functions to set the coordinates of this ball's location
     void setYLocation(double yL);
     void setZLocation(double zL);
-    void setMass(float m);  //function to set the ball's mass
-    void setRadius(float r);   //function to set the ball's radius
-    void markBall();
+    void setMass(float m);            //function to set the ball's mass
+    void setRadius(float r);          //function to set the ball's radius
+    void markBall(bool);                  //function that will mark the ball once it is sunk into a pocket
 };
 
 #endif
