@@ -6,7 +6,7 @@
 
 public class Customer implements Comparable
 {
-	// data for each Customer. Each customer has its personal information, mailing address, and phone number.
+	// data for each Customer. Each customer has its personal information, mailing address, and customer ID number.
 	protected PersonalInformation personal;
 	protected MailingAddress mailing;
 	protected int number;
