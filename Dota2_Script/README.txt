@@ -1,4 +1,4 @@
-This is a script I wrote in Python that processes match information from the game Dota2.
+This is a script I wrote in Python that processes match information from the game Dota 2.
 
 The filename specified on line 7 is the name of a file that I retrieved previously that contains a list of my most recent 100 matches. This script opens that file, and three other files that are all necessary before the processing actually begins.
 
