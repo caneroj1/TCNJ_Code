@@ -12,13 +12,15 @@ import javafoundations.*;
 
 public class Message implements Comparable<Message>
 {
-	private String Newsg;
+	// private data for each each message object
+	private String Newsg;	// the newsgroup the particular message is from
 	private String From;
 	private String Subject;
 	private String Date;
 	private String Message;
 	private LinkedSet<String> set;
 	
+	// constructor method for a message object
 	public Message (String Newsg, String From, String Subject, String Date, String Message, LinkedSet<String> set)
 	{
 		this.Newsg = Newsg;
@@ -29,26 +31,32 @@ public class Message implements Comparable<Message>
 		this.set = set;
 	}
 	
+	// accessor method for the message part of the message object 
 	public String getMessage ()
 	{
 		return Message;
 	}
 	
+	// accessor method for the From part of the message object
 	public String getFrom ()
 	{
 		return From;
 	}
 	
+	// accessor method for the Date of the message object
 	public String getDate ()
 	{
 		return Date;
 	}
 	
+	// accessor method for the Subject of the message object
 	public String getSubject ()
 	{
 		return Subject;
 	}
 	
+	// method that will return a boolean indicating if the message part of the
+	// message object contains the desired string
 	public boolean foundInMessage (String str)
 	{
 		boolean found = false;
@@ -59,6 +67,8 @@ public class Message implements Comparable<Message>
 		return found;
 	}
 	
+	// method that returns a boolean if the message was posted in more than one newsgroup
+	// it does this by checking if there is a comma indicating additional newsgroups
 	public boolean checkPost ()
 	{
 		boolean crossPost;
@@ -71,6 +81,7 @@ public class Message implements Comparable<Message>
 		return crossPost;
 	}
 	
+	// compareTo method for each message that that will be used for sorting and determining order of the messages
 	public int compareTo(Message object)
 	{
 		
@@ -94,6 +105,8 @@ public class Message implements Comparable<Message>
 		return compareResult;
 	}
 	
+	// toString method for the message object that will neatly format the contents of the message and return
+	// an informative string
 	public String toString ()
 	{
 		//Prints a summary of the Message Object
